@@ -26,8 +26,8 @@ flowchart LR
     api --> qry[Query bus]
     sse[SSE stream]
   end
-  cmd -->|claim + ClaimFiled in one transaction| pg[(Postgres in PGlite)]
-  qry -->|keyset pages| pg
+  cmd -->|Claim and ClaimFiled in one transaction| pg[(Postgres in PGlite)]
+  qry -->|Keyset pages| pg
   pg --> relay[Outbox relay]
   relay --> proj[Projector: claims read model]
   relay --> enq[Triage job enqueuer]
