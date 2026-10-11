@@ -21,8 +21,8 @@ export class OutboxRelay implements OnApplicationBootstrap, OnApplicationShutdow
   private readonly log = new Logger('OutboxRelay');
   private readonly consumers: EventConsumer[];
   private timer?: NodeJS.Timeout;
-  private running = false;
-  private again = false;
+  private chain: Promise<void> = Promise.resolve();
+  private queued = false;
   private stopped = false;
 
   constructor(
@@ -46,35 +46,33 @@ export class OutboxRelay implements OnApplicationBootstrap, OnApplicationShutdow
     if (this.timer) clearInterval(this.timer);
   }
 
-  /** Ask for a pass now (called after commits). Passes never overlap. */
+  /** Ask for a pass (called after commits and by the poll timer). Passes run one at a time; at most one waits. */
   nudge(): void {
-    if (this.stopped) return;
-    if (this.running) {
-      this.again = true;
-      return;
-    }
-    this.running = true;
-    void this.drain()
-      .catch((e: unknown) => this.log.error(`relay pass failed: ${String(e)}`))
-      .finally(() => {
-        this.running = false;
-        if (this.again) {
-          this.again = false;
-          this.nudge();
-        }
-      });
+    if (this.stopped || this.queued) return;
+    this.queued = true;
+    this.chain = this.chain.then(async () => {
+      this.queued = false;
+      try {
+        await this.drainPass();
+      } catch (e) {
+        this.log.error(`relay pass failed: ${String(e)}`);
+      }
+    });
   }
 
-  /** Publish every pending event. Resolves when the outbox is empty. */
-  async drain(): Promise<number> {
-    let total = 0;
+  /** Resolves once every event committed so far has been delivered. */
+  async settle(): Promise<void> {
+    this.nudge();
+    await this.chain;
+  }
+
+  private async drainPass(): Promise<void> {
     for (;;) {
       const { rows } = await this.db.query<DomainEvent>('SELECT * FROM events WHERE published_at IS NULL ORDER BY seq LIMIT 50');
-      if (!rows.length) return total;
+      if (!rows.length) return;
       for (const e of rows) {
         await this.deliver(e);
         await this.db.query('UPDATE events SET published_at = now() WHERE seq = $1', [e.seq]);
-        total++;
       }
     }
   }

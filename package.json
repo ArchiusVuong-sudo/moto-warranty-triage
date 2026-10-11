@@ -21,11 +21,13 @@
     "test": "npm run test:api && npm run test:py",
     "test:api": "npm run test -w api",
     "test:py": "cd ai-service && uv run --frozen pytest -q",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "typecheck": "npm run typecheck -w api && npm run typecheck -w web",
     "lint": "npm run lint -w api",
     "eval": "cd ai-service && uv run --frozen python -m triage_service.evals",
-    "record:fixtures": "cd ai-service && uv run --frozen python -m triage_service.record_fixtures"
+    "record:fixtures": "cd ai-service && uv run --frozen python -m triage_service.record_fixtures",
+    "test:all": "npm test && npm run test:e2e",
+    "test:live": "cd ai-service && LIVE=1 uv run --frozen pytest -q tests/test_live.py"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0"
