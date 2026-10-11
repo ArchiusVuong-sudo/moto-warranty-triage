@@ -1,0 +1,30 @@
+[project]
+name = "triage-service"
+version = "0.1.0"
+description = "Python triage agent for warranty claims, served over HTTP with an idempotency store"
+authors = [{ name = "Khanh Vuong Tuan" }]
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = [
+    "claude-agent-sdk==0.2.165",
+    "fastapi>=0.143.0",
+    "jsonschema>=4.26.0",
+    "pydantic>=2.14.0",
+    "uvicorn>=0.54.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = ["live: calls the real model (opt in with LIVE=1)"]

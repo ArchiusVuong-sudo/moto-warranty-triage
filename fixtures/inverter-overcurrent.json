@@ -1,0 +1,326 @@
+{
+  "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
+  "result": {
+    "evidence": [
+      {
+        "detail": "Current peak 533 A (over 450 A limit) at inverter temp 64.4 C; INV-301 logged.",
+        "kind": "telemetry",
+        "ref": "t=142-142s"
+      },
+      {
+        "detail": "Current peak 544 A, inverter temp 76.1 C.",
+        "kind": "telemetry",
+        "ref": "t=263-263s"
+      },
+      {
+        "detail": "Spikes of 538.9 A at t=388 (83.4 C) and 529.5 A at t=507 (88.1 C); four spikes total, each matching a fault.",
+        "kind": "telemetry",
+        "ref": "t=388-507s"
+      },
+      {
+        "detail": "Phase overcurrent above 450 A, gates shut. Logged at t=142, 263, 388, 507. Cut and restart points to inverter current sensing.",
+        "kind": "fault_code",
+        "ref": "INV-301"
+      },
+      {
+        "detail": "Inverter phase current sensor offset: motor cuts out and restarts at full throttle, INV-301. Fix is replacing the sensor board and phase calibration.",
+        "kind": "bulletin",
+        "ref": "SB-2026-02"
+      },
+      {
+        "detail": "Motor and inverter covered for 24 months; bike is 8 months and 2,980 km.",
+        "kind": "policy",
+        "ref": "W3"
+      }
+    ],
+    "repair": {
+      "labour_hours": 2,
+      "parts": [
+        {
+          "description": "Inverter current sensor board",
+          "part_number": "52-1144",
+          "qty": 1
+        }
+      ]
+    },
+    "root_cause": {
+      "code": "INVERTER_OVERCURRENT",
+      "component": "Inverter current sensor board",
+      "confidence": 0.85,
+      "title": "Inverter phase current sensor offset causing INV-301 cut-outs"
+    },
+    "schema_version": "1",
+    "summary": "Four current spikes of 529\u2013544 A, each matching an INV-301 fault, caused the motor to cut out and restart at full throttle. Spikes occurred across a range of inverter temperatures, so this is not heat. This matches SB-2026-02: replace the inverter current sensor board and calibrate. Covered under W3.",
+    "warranty": {
+      "clause": "W3",
+      "decision": "covered",
+      "reason": "Drive unit: vehicle is 8 months and 2,980 km, inside 24 months."
+    }
+  },
+  "ride_log_sha256": "83db743839ce3457dca32c471f5bf6f178a6687ed1c47302531b96046f981e44",
+  "run": {
+    "cost_usd": 0.02659,
+    "duration_ms": 9949,
+    "input_tokens": 15229,
+    "model": "claude-sonnet-5-5",
+    "num_turns": 6,
+    "output_tokens": 1192
+  },
+  "scenario": "inverter-overcurrent",
+  "source": {
+    "kind": "live",
+    "model": "claude-sonnet-5-5",
+    "recorded_at": "2026-10-11"
+  },
+  "spans": [
+    {
+      "duration_ms": 0.78,
+      "input": {},
+      "name": "analyze_telemetry",
+      "ok": true,
+      "output": {
+        "events": [
+          {
+            "inverter_temp_c": 64.42,
+            "kind": "current_over_450a",
+            "peak_a": 533.34,
+            "window": "t=142-142s"
+          },
+          {
+            "inverter_temp_c": 76.13,
+            "kind": "current_over_450a",
+            "peak_a": 544.26,
+            "window": "t=263-263s"
+          },
+          {
+            "inverter_temp_c": 83.43,
+            "kind": "current_over_450a",
+            "peak_a": 538.94,
+            "window": "t=388-388s"
+          },
+          {
+            "inverter_temp_c": 88.07,
+            "kind": "current_over_450a",
+            "peak_a": 529.45,
+            "window": "t=507-507s"
+          }
+        ],
+        "fault_codes": [
+          {
+            "code": "INV-301",
+            "t": 142
+          },
+          {
+            "code": "INV-301",
+            "t": 263
+          },
+          {
+            "code": "INV-301",
+            "t": 388
+          },
+          {
+            "code": "INV-301",
+            "t": 507
+          }
+        ],
+        "firmware": "4.1.2",
+        "samples": 600,
+        "stats": {
+          "cell_delta_mv": {
+            "max": 36.0,
+            "mean": 30.03,
+            "min": 24.0
+          },
+          "cell_max_v": {
+            "max": 3.878,
+            "mean": 3.566,
+            "min": 3.227
+          },
+          "cell_min_v": {
+            "max": 3.849,
+            "mean": 3.536,
+            "min": 3.195
+          },
+          "charge_power_kw": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "coolant_flow_lpm": {
+            "max": 6.247,
+            "mean": 5.997,
+            "min": 5.751
+          },
+          "coolant_temp_c": {
+            "max": 64.435,
+            "mean": 49.538,
+            "min": 36.014
+          },
+          "current_a": {
+            "max": 544.26,
+            "mean": 224.497,
+            "min": 0.0
+          },
+          "humidity_pct": {
+            "max": 53.999,
+            "mean": 52.023,
+            "min": 50.004
+          },
+          "imu_peak_g": {
+            "max": 2.479,
+            "mean": 1.007,
+            "min": 0.603
+          },
+          "inverter_temp_c": {
+            "max": 91.625,
+            "mean": 74.532,
+            "min": 40.193
+          },
+          "motor_temp_c": {
+            "max": 121.899,
+            "mean": 97.943,
+            "min": 48.286
+          },
+          "pack_temp_c": {
+            "max": 32.148,
+            "mean": 29.49,
+            "min": 26.899
+          },
+          "pack_v": {
+            "max": 371.064,
+            "mean": 340.899,
+            "min": 308.077
+          },
+          "soc_pct": {
+            "max": 85.889,
+            "mean": 49.749,
+            "min": 13.969
+          },
+          "speed_kmh": {
+            "max": 76.823,
+            "mean": 57.797,
+            "min": 31.671
+          },
+          "throttle_pct": {
+            "max": 90.248,
+            "mean": 59.768,
+            "min": 27.352
+          }
+        },
+        "window": "t=0-599s"
+      },
+      "seq": 1,
+      "started_at": "2026-10-11T04:04:23.745538+00:00"
+    },
+    {
+      "duration_ms": 0.06,
+      "input": {
+        "code": "INV-301"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Look for current spikes above 450 A with normal inverter temperature. Spikes with a cut and restart point to the inverter current sensing.",
+        "code": "INV-301",
+        "found": true,
+        "likely_causes": [
+          "Current sensor drift in the inverter",
+          "Motor phase short",
+          "Gate driver fault"
+        ],
+        "logged_at_s": [
+          142,
+          263,
+          388,
+          507
+        ],
+        "meaning": "Phase current exceeded the 450 A hardware limit and the inverter shut its gates.",
+        "system": "drive",
+        "title": "Phase overcurrent"
+      },
+      "seq": 2,
+      "started_at": "2026-10-11T04:04:24.351179+00:00"
+    },
+    {
+      "duration_ms": 0.1,
+      "input": {
+        "model": "Talus EN",
+        "query": "motor cuts out at full throttle INV-301"
+      },
+      "name": "search_service_bulletins",
+      "ok": true,
+      "output": {
+        "model": "Talus EN",
+        "results": [
+          {
+            "fix": "Replace the inverter current sensor board and run the phase calibration.",
+            "id": "SB-2026-02",
+            "labour_hours": 2.0,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Inverter current sensor board",
+                "part_number": "52-1144",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "motor cuts out and restarts at full throttle",
+              "INV-301",
+              "current spikes above 450 A"
+            ],
+            "title": "Inverter phase current sensor offset"
+          },
+          {
+            "fix": "Fit the new retention clip and reseat the throttle connector.",
+            "id": "SB-2026-05",
+            "labour_hours": 0.5,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Throttle connector retention clip",
+                "part_number": "33-0515",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "throttle cuts in and out over bumps",
+              "THR-601"
+            ],
+            "title": "Throttle connector retention clip"
+          }
+        ]
+      },
+      "seq": 3,
+      "started_at": "2026-10-11T04:04:24.357554+00:00"
+    },
+    {
+      "duration_ms": 0.05,
+      "input": {
+        "cause_code": "INVERTER_OVERCURRENT",
+        "confidence": 0.85
+      },
+      "name": "check_warranty",
+      "ok": true,
+      "output": {
+        "clause": "W3",
+        "clause_text": "Motor and inverter are covered for 24 months from the sale date.",
+        "decision": "covered",
+        "facts": {
+          "age_months": 8,
+          "fault_codes": [
+            "INV-301"
+          ],
+          "firmware": "4.1.2",
+          "first_fault_t": 142,
+          "max_g_before_first_fault": 1.9,
+          "odometer_km": 2980,
+          "water_exposure": false
+        },
+        "reason": "Drive unit: vehicle is 8 months and 2,980 km, inside 24 months."
+      },
+      "seq": 4,
+      "started_at": "2026-10-11T04:04:26.505202+00:00"
+    }
+  ]
+}

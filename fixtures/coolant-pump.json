@@ -1,0 +1,405 @@
+{
+  "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
+  "result": {
+    "evidence": [
+      {
+        "detail": "Coolant flow fell to 0.2 L/min while riding; motor temp rose from 86.95 C to 152 C.",
+        "kind": "telemetry",
+        "ref": "t=180-599s"
+      },
+      {
+        "detail": "Motor temperature stayed above 140 C, peak 152 C.",
+        "kind": "telemetry",
+        "ref": "t=454-599s"
+      },
+      {
+        "detail": "Coolant flow low, logged at t=184s, before the motor overheated.",
+        "kind": "fault_code",
+        "ref": "COOL-501"
+      },
+      {
+        "detail": "Motor over temperature (>140 C), logged at t=454s; torque derated.",
+        "kind": "fault_code",
+        "ref": "MOT-401"
+      },
+      {
+        "detail": "Limp mode at t=456s, two seconds after MOT-401.",
+        "kind": "fault_code",
+        "ref": "VCU-120"
+      },
+      {
+        "detail": "Coolant pump connector corrosion: matches overheat on climbs, COOL-501, MOT-401, zero flow. Fix: replace pump and sealed connector.",
+        "kind": "bulletin",
+        "ref": "SB-2026-03"
+      },
+      {
+        "detail": "Coolant pump covered 24 months; vehicle is 15 months, 7,350 km.",
+        "kind": "policy",
+        "ref": "W4"
+      }
+    ],
+    "repair": {
+      "labour_hours": 1.2,
+      "parts": [
+        {
+          "description": "Coolant pump assembly",
+          "part_number": "63-0821",
+          "qty": 1
+        },
+        {
+          "description": "Sealed pump connector",
+          "part_number": "63-0830",
+          "qty": 1
+        },
+        {
+          "description": "Coolant, 1 L",
+          "part_number": "63-0002",
+          "qty": 1
+        }
+      ]
+    },
+    "root_cause": {
+      "code": "COOLANT_PUMP_FAILURE",
+      "component": "Coolant pump and connector",
+      "confidence": 0.9,
+      "title": "Coolant pump flow loss causing motor overheat and limp mode"
+    },
+    "schema_version": "1",
+    "summary": "Coolant flow dropped to 0.2 L/min at about t=180s while riding. The motor then heated from 87 C to 152 C. That triggered the over-temperature fault and limp mode. This matches bulletin SB-2026-03 (pump and connector). Replace the pump and sealed connector and bleed the loop. Covered under W4.",
+    "warranty": {
+      "clause": "W4",
+      "decision": "covered",
+      "reason": "Cooling system: vehicle is 15 months and 7,350 km, inside 24 months."
+    }
+  },
+  "ride_log_sha256": "a4c0d8309a5182852ac651be10bde0acd76556d52f7bb02097d6a84199cd76e1",
+  "run": {
+    "cost_usd": 0.0316,
+    "duration_ms": 10658,
+    "input_tokens": 21246,
+    "model": "claude-sonnet-5-5",
+    "num_turns": 8,
+    "output_tokens": 1338
+  },
+  "scenario": "coolant-pump",
+  "source": {
+    "kind": "live",
+    "model": "claude-sonnet-5-5",
+    "recorded_at": "2026-10-11"
+  },
+  "spans": [
+    {
+      "duration_ms": 0.49,
+      "input": {},
+      "name": "analyze_telemetry",
+      "ok": true,
+      "output": {
+        "events": [
+          {
+            "kind": "coolant_flow_below_1lpm_while_riding",
+            "min_flow_lpm": 0.2,
+            "motor_temp_end_c": 152.0,
+            "motor_temp_start_c": 86.95,
+            "window": "t=180-599s"
+          },
+          {
+            "kind": "motor_over_140c",
+            "peak_c": 152.0,
+            "window": "t=454-599s"
+          }
+        ],
+        "fault_codes": [
+          {
+            "code": "COOL-501",
+            "t": 184
+          },
+          {
+            "code": "MOT-401",
+            "t": 454
+          },
+          {
+            "code": "VCU-120",
+            "t": 456
+          }
+        ],
+        "firmware": "4.1.2",
+        "samples": 600,
+        "stats": {
+          "cell_delta_mv": {
+            "max": 36.0,
+            "mean": 30.127,
+            "min": 24.0
+          },
+          "cell_max_v": {
+            "max": 3.894,
+            "mean": 3.586,
+            "min": 3.269
+          },
+          "cell_min_v": {
+            "max": 3.861,
+            "mean": 3.556,
+            "min": 3.239
+          },
+          "charge_power_kw": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "coolant_flow_lpm": {
+            "max": 6.248,
+            "mean": 2.036,
+            "min": 0.2
+          },
+          "coolant_temp_c": {
+            "max": 67.808,
+            "mean": 50.306,
+            "min": 36.014
+          },
+          "current_a": {
+            "max": 305.528,
+            "mean": 184.44,
+            "min": 90.0
+          },
+          "humidity_pct": {
+            "max": 53.996,
+            "mean": 51.989,
+            "min": 50.001
+          },
+          "imu_peak_g": {
+            "max": 2.249,
+            "mean": 0.982,
+            "min": 0.604
+          },
+          "inverter_temp_c": {
+            "max": 99.0,
+            "mean": 75.261,
+            "min": 40.22
+          },
+          "motor_temp_c": {
+            "max": 152.0,
+            "mean": 109.453,
+            "min": 48.326
+          },
+          "pack_temp_c": {
+            "max": 32.116,
+            "mean": 29.49,
+            "min": 26.818
+          },
+          "pack_v": {
+            "max": 372.212,
+            "mean": 342.814,
+            "min": 312.354
+          },
+          "soc_pct": {
+            "max": 85.874,
+            "mean": 51.312,
+            "min": 16.591
+          },
+          "speed_kmh": {
+            "max": 73.239,
+            "mean": 56.232,
+            "min": 37.483
+          },
+          "throttle_pct": {
+            "max": 83.948,
+            "mean": 47.483,
+            "min": 20.0
+          }
+        },
+        "window": "t=0-599s"
+      },
+      "seq": 1,
+      "started_at": "2026-10-11T04:03:50.406175+00:00"
+    },
+    {
+      "duration_ms": 0.05,
+      "input": {
+        "code": "COOL-501"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Flow that drops to near zero while the pump is commanded on points to the pump or its connector.",
+        "code": "COOL-501",
+        "found": true,
+        "likely_causes": [
+          "Coolant pump failure",
+          "Pump connector corrosion",
+          "Air in the loop"
+        ],
+        "logged_at_s": [
+          184
+        ],
+        "meaning": "Coolant flow below 1.0 L/min while the drive unit is hot.",
+        "system": "cooling",
+        "title": "Coolant flow low"
+      },
+      "seq": 2,
+      "started_at": "2026-10-11T04:03:51.754377+00:00"
+    },
+    {
+      "duration_ms": 0.02,
+      "input": {
+        "code": "MOT-401"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Check coolant flow against motor temperature over the same window.",
+        "code": "MOT-401",
+        "found": true,
+        "likely_causes": [
+          "Low coolant flow",
+          "Sustained overload"
+        ],
+        "logged_at_s": [
+          454
+        ],
+        "meaning": "Motor winding temperature above 140 C, torque derated.",
+        "system": "drive",
+        "title": "Motor over temperature"
+      },
+      "seq": 3,
+      "started_at": "2026-10-11T04:03:52.103368+00:00"
+    },
+    {
+      "duration_ms": 0.01,
+      "input": {
+        "code": "VCU-120"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Find the fault that triggered limp mode.",
+        "code": "VCU-120",
+        "found": true,
+        "likely_causes": [
+          "Repeated protection events"
+        ],
+        "logged_at_s": [
+          456
+        ],
+        "meaning": "Torque limited to 20 percent until restart.",
+        "system": "controls",
+        "title": "Limp mode"
+      },
+      "seq": 4,
+      "started_at": "2026-10-11T04:03:52.169725+00:00"
+    },
+    {
+      "duration_ms": 0.15,
+      "input": {
+        "model": "Talus EN",
+        "query": "overheat reduced power limp mode low coolant flow COOL-501 MOT-401 VCU-120"
+      },
+      "name": "search_service_bulletins",
+      "ok": true,
+      "output": {
+        "model": "Talus EN",
+        "results": [
+          {
+            "fix": "Replace the coolant pump and its sealed connector, bleed the loop.",
+            "id": "SB-2026-03",
+            "labour_hours": 1.2,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Coolant pump assembly",
+                "part_number": "63-0821",
+                "qty": 1
+              },
+              {
+                "description": "Sealed pump connector",
+                "part_number": "63-0830",
+                "qty": 1
+              },
+              {
+                "description": "Coolant, 1 L",
+                "part_number": "63-0002",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "overheat warning on long climbs",
+              "COOL-501",
+              "MOT-401",
+              "coolant flow drops to zero"
+            ],
+            "title": "Coolant pump connector corrosion"
+          },
+          {
+            "fix": "Replace the affected battery module and rebalance the pack.",
+            "id": "SB-2026-01",
+            "labour_hours": 1.5,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Battery module, 12 cell group",
+                "part_number": "41-2207",
+                "qty": 1
+              },
+              {
+                "description": "Module busbar kit",
+                "part_number": "41-0310",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "power cut under hard acceleration",
+              "BMS-201",
+              "VCU-110",
+              "cell voltage spread under load"
+            ],
+            "title": "Cell group balance drift on early battery packs"
+          },
+          {
+            "fix": "Update the battery controller and vehicle controller firmware to 4.1.0 or later. No parts.",
+            "id": "SB-2026-06",
+            "labour_hours": 0.5,
+            "min_firmware": "4.1.0",
+            "parts": [],
+            "symptoms": [
+              "charging stops at 80%",
+              "BMS-210",
+              "charge power drops to zero at 80 percent"
+            ],
+            "title": "Charge stops at 80 percent on firmware before 4.1.0",
+            "vehicle_firmware_below_minimum": false
+          }
+        ]
+      },
+      "seq": 5,
+      "started_at": "2026-10-11T04:03:52.668096+00:00"
+    },
+    {
+      "duration_ms": 0.03,
+      "input": {
+        "cause_code": "COOLANT_PUMP_FAILURE",
+        "confidence": 0.9
+      },
+      "name": "check_warranty",
+      "ok": true,
+      "output": {
+        "clause": "W4",
+        "clause_text": "Coolant pump, radiator and hoses are covered for 24 months from the sale date.",
+        "decision": "covered",
+        "facts": {
+          "age_months": 15,
+          "fault_codes": [
+            "COOL-501",
+            "MOT-401",
+            "VCU-120"
+          ],
+          "firmware": "4.1.2",
+          "first_fault_t": 184,
+          "max_g_before_first_fault": 1.7,
+          "odometer_km": 7350,
+          "water_exposure": false
+        },
+        "reason": "Cooling system: vehicle is 15 months and 7,350 km, inside 24 months."
+      },
+      "seq": 6,
+      "started_at": "2026-10-11T04:03:53.966969+00:00"
+    }
+  ]
+}

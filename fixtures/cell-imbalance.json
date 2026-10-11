@@ -1,0 +1,429 @@
+{
+  "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
+  "result": {
+    "evidence": [
+      {
+        "detail": "Cell delta reached 199 mV at 317 A, min cell 3.51 V. Spread opens under load; later peaks hit 248 mV (t=65-77s) and 283 mV overall.",
+        "kind": "telemetry",
+        "ref": "t=8-9s"
+      },
+      {
+        "detail": "Cell voltage deviation over 150 mV under load, logged 6 times (first t=8s).",
+        "kind": "fault_code",
+        "ref": "BMS-201"
+      },
+      {
+        "detail": "Torque limit active, logged 1s after each BMS-201 (t=9s, 66s, 120s...), matching the power cuts.",
+        "kind": "fault_code",
+        "ref": "VCU-110"
+      },
+      {
+        "detail": "Cell group balance drift: power cut under hard acceleration, BMS-201, VCU-110. Fix: replace module and rebalance.",
+        "kind": "bulletin",
+        "ref": "SB-2026-01"
+      },
+      {
+        "detail": "Battery pack covered 36 months or 30,000 km; bike is 11 months, 4,210 km.",
+        "kind": "policy",
+        "ref": "W2"
+      }
+    ],
+    "repair": {
+      "labour_hours": 1.5,
+      "parts": [
+        {
+          "description": "Battery module, 12 cell group",
+          "part_number": "41-2207",
+          "qty": 1
+        },
+        {
+          "description": "Module busbar kit",
+          "part_number": "41-0310",
+          "qty": 1
+        }
+      ]
+    },
+    "root_cause": {
+      "code": "BATTERY_CELL_IMBALANCE",
+      "component": "Battery module (12 cell group)",
+      "confidence": 0.9,
+      "title": "Weak cell group causing voltage spread under load"
+    },
+    "schema_version": "1",
+    "summary": "Cell voltage spread exceeds 150 mV under heavy current, up to 283 mV. Each BMS-201 is followed one second later by a VCU-110 torque cut, which is the power loss the customer feels. This matches bulletin SB-2026-01. Replace the battery module and busbar kit, then rebalance. Covered under W2.",
+    "warranty": {
+      "clause": "W2",
+      "decision": "covered",
+      "reason": "Battery pack and battery controller: vehicle is 11 months and 4,210 km, inside 36 months or 30,000 km."
+    }
+  },
+  "ride_log_sha256": "1f87b180145868a0c8dad70e45f698534227bafe15393c763c2956180b5342d4",
+  "run": {
+    "cost_usd": 0.04239,
+    "duration_ms": 10845,
+    "input_tokens": 22330,
+    "model": "claude-sonnet-5-5",
+    "num_turns": 7,
+    "output_tokens": 1198
+  },
+  "scenario": "cell-imbalance",
+  "source": {
+    "kind": "live",
+    "model": "claude-sonnet-5-5",
+    "recorded_at": "2026-10-11"
+  },
+  "spans": [
+    {
+      "duration_ms": 0.5,
+      "input": {},
+      "name": "analyze_telemetry",
+      "ok": true,
+      "output": {
+        "events": [
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 317.41,
+            "max_delta_mv": 199.0,
+            "min_cell_v": 3.51,
+            "window": "t=8-9s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 317.0,
+            "max_delta_mv": 223.0,
+            "min_cell_v": 3.48,
+            "window": "t=11-12s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 321.92,
+            "max_delta_mv": 208.0,
+            "min_cell_v": 3.49,
+            "window": "t=14-18s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 312.26,
+            "max_delta_mv": 184.0,
+            "min_cell_v": 3.52,
+            "window": "t=20-20s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 335.11,
+            "max_delta_mv": 248.0,
+            "min_cell_v": 3.39,
+            "window": "t=65-77s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 305.71,
+            "max_delta_mv": 167.0,
+            "min_cell_v": 3.46,
+            "window": "t=119-119s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 334.88,
+            "max_delta_mv": 242.0,
+            "min_cell_v": 3.34,
+            "window": "t=124-128s"
+          },
+          {
+            "kind": "cell_delta_over_150mv",
+            "max_current_a": 333.16,
+            "max_delta_mv": 239.0,
+            "min_cell_v": 3.34,
+            "window": "t=130-133s"
+          },
+          {
+            "count": 38,
+            "kind": "cell_delta_over_150mv",
+            "window": "more"
+          }
+        ],
+        "fault_codes": [
+          {
+            "code": "BMS-201",
+            "t": 8
+          },
+          {
+            "code": "VCU-110",
+            "t": 9
+          },
+          {
+            "code": "BMS-201",
+            "t": 65
+          },
+          {
+            "code": "VCU-110",
+            "t": 66
+          },
+          {
+            "code": "BMS-201",
+            "t": 119
+          },
+          {
+            "code": "VCU-110",
+            "t": 120
+          },
+          {
+            "code": "BMS-201",
+            "t": 176
+          },
+          {
+            "code": "VCU-110",
+            "t": 177
+          },
+          {
+            "code": "BMS-201",
+            "t": 234
+          },
+          {
+            "code": "VCU-110",
+            "t": 235
+          },
+          {
+            "code": "BMS-201",
+            "t": 289
+          },
+          {
+            "code": "VCU-110",
+            "t": 290
+          }
+        ],
+        "firmware": "4.1.2",
+        "samples": 600,
+        "stats": {
+          "cell_delta_mv": {
+            "max": 283.0,
+            "mean": 70.482,
+            "min": 24.0
+          },
+          "cell_max_v": {
+            "max": 3.893,
+            "mean": 3.545,
+            "min": 3.177
+          },
+          "cell_min_v": {
+            "max": 3.861,
+            "mean": 3.474,
+            "min": 2.894
+          },
+          "charge_power_kw": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "coolant_flow_lpm": {
+            "max": 6.249,
+            "mean": 6.0,
+            "min": 5.751
+          },
+          "coolant_temp_c": {
+            "max": 65.501,
+            "mean": 49.98,
+            "min": 36.014
+          },
+          "current_a": {
+            "max": 347.966,
+            "mean": 227.476,
+            "min": 60.0
+          },
+          "humidity_pct": {
+            "max": 53.985,
+            "mean": 52.006,
+            "min": 50.001
+          },
+          "imu_peak_g": {
+            "max": 2.091,
+            "mean": 1.012,
+            "min": 0.602
+          },
+          "inverter_temp_c": {
+            "max": 94.223,
+            "mean": 76.006,
+            "min": 40.213
+          },
+          "motor_temp_c": {
+            "max": 125.642,
+            "mean": 100.082,
+            "min": 48.316
+          },
+          "pack_temp_c": {
+            "max": 32.124,
+            "mean": 29.493,
+            "min": 26.884
+          },
+          "pack_v": {
+            "max": 372.052,
+            "mean": 338.86,
+            "min": 303.353
+          },
+          "soc_pct": {
+            "max": 85.878,
+            "mean": 48.295,
+            "min": 10.746
+          },
+          "speed_kmh": {
+            "max": 80.128,
+            "mean": 59.423,
+            "min": 37.23
+          },
+          "throttle_pct": {
+            "max": 96.584,
+            "mean": 62.776,
+            "min": 27.334
+          }
+        },
+        "window": "t=0-599s"
+      },
+      "seq": 1,
+      "started_at": "2026-10-11T04:03:29.858579+00:00"
+    },
+    {
+      "duration_ms": 0.05,
+      "input": {
+        "code": "BMS-201"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Compare cell min and max under peak current. A spread that only opens under load points to one weak cell group.",
+        "code": "BMS-201",
+        "found": true,
+        "likely_causes": [
+          "Weak or aged cell group",
+          "Balancing circuit fault",
+          "Loose busbar on a module"
+        ],
+        "logged_at_s": [
+          8,
+          65,
+          119,
+          176,
+          234,
+          289
+        ],
+        "meaning": "Spread between the highest and lowest cell group exceeded 150 mV while the pack was under load.",
+        "system": "battery",
+        "title": "Cell voltage deviation high"
+      },
+      "seq": 2,
+      "started_at": "2026-10-11T04:03:31.471750+00:00"
+    },
+    {
+      "duration_ms": 0.02,
+      "input": {
+        "code": "VCU-110"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Find the protection fault logged right before it.",
+        "code": "VCU-110",
+        "found": true,
+        "likely_causes": [
+          "Any battery, drive or cooling protection"
+        ],
+        "logged_at_s": [
+          9,
+          66,
+          120,
+          177,
+          235,
+          290
+        ],
+        "meaning": "The vehicle controller cut torque to protect a component.",
+        "system": "controls",
+        "title": "Torque limit active"
+      },
+      "seq": 3,
+      "started_at": "2026-10-11T04:03:31.746290+00:00"
+    },
+    {
+      "duration_ms": 0.24,
+      "input": {
+        "model": "Ridgeback MX",
+        "query": "power cut under acceleration cell imbalance BMS-201 VCU-110"
+      },
+      "name": "search_service_bulletins",
+      "ok": true,
+      "output": {
+        "model": "Ridgeback MX",
+        "results": [
+          {
+            "fix": "Replace the affected battery module and rebalance the pack.",
+            "id": "SB-2026-01",
+            "labour_hours": 1.5,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Battery module, 12 cell group",
+                "part_number": "41-2207",
+                "qty": 1
+              },
+              {
+                "description": "Module busbar kit",
+                "part_number": "41-0310",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "power cut under hard acceleration",
+              "BMS-201",
+              "VCU-110",
+              "cell voltage spread under load"
+            ],
+            "title": "Cell group balance drift on early battery packs"
+          },
+          {
+            "fix": "Update the battery controller and vehicle controller firmware to 4.1.0 or later. No parts.",
+            "id": "SB-2026-06",
+            "labour_hours": 0.5,
+            "min_firmware": "4.1.0",
+            "parts": [],
+            "symptoms": [
+              "charging stops at 80%",
+              "BMS-210",
+              "charge power drops to zero at 80 percent"
+            ],
+            "title": "Charge stops at 80 percent on firmware before 4.1.0",
+            "vehicle_firmware_below_minimum": false
+          }
+        ]
+      },
+      "seq": 4,
+      "started_at": "2026-10-11T04:03:31.988562+00:00"
+    },
+    {
+      "duration_ms": 0.04,
+      "input": {
+        "cause_code": "BATTERY_CELL_IMBALANCE",
+        "confidence": 0.9
+      },
+      "name": "check_warranty",
+      "ok": true,
+      "output": {
+        "clause": "W2",
+        "clause_text": "The battery pack and battery controller are covered for 36 months or 30,000 km from the sale date, whichever comes first.",
+        "decision": "covered",
+        "facts": {
+          "age_months": 11,
+          "fault_codes": [
+            "BMS-201",
+            "VCU-110"
+          ],
+          "firmware": "4.1.2",
+          "first_fault_t": 8,
+          "max_g_before_first_fault": 1.6,
+          "odometer_km": 4210,
+          "water_exposure": false
+        },
+        "reason": "Battery pack and battery controller: vehicle is 11 months and 4,210 km, inside 36 months or 30,000 km."
+      },
+      "seq": 5,
+      "started_at": "2026-10-11T04:03:33.685761+00:00"
+    }
+  ]
+}

@@ -1,0 +1,323 @@
+{
+  "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
+  "result": {
+    "evidence": [
+      {
+        "detail": "Humidity 96.5-98.5% (peak 98.5%); no impact (imu peak 0.05 g); stationary.",
+        "kind": "telemetry",
+        "ref": "t=0-599s"
+      },
+      {
+        "detail": "Charging stopped at SoC 32.88% after 10.72 kW, matching the ~1.5 minute trip.",
+        "kind": "telemetry",
+        "ref": "t=96-96s"
+      },
+      {
+        "detail": "Charge port moisture detected at plug in (t=2s).",
+        "kind": "fault_code",
+        "ref": "CHG-701"
+      },
+      {
+        "detail": "Charge port isolation fault during charging (t=96s).",
+        "kind": "fault_code",
+        "ref": "CHG-702"
+      },
+      {
+        "detail": "Dry the port and replace the port seal (71-0404, 0.6 h). Pressure washing at the port is excluded.",
+        "kind": "bulletin",
+        "ref": "SB-2026-04"
+      },
+      {
+        "detail": "Water ingress from pressure washing at the charge port or connectors is not covered.",
+        "kind": "policy",
+        "ref": "W7"
+      }
+    ],
+    "repair": {
+      "labour_hours": 0.6,
+      "parts": [
+        {
+          "description": "Charge port seal",
+          "part_number": "71-0404",
+          "qty": 1
+        }
+      ]
+    },
+    "root_cause": {
+      "code": "CHARGE_PORT_WATER_INGRESS",
+      "component": "Charge port",
+      "confidence": 0.9,
+      "title": "Water in charge port after washing causing isolation fault"
+    },
+    "schema_version": "1",
+    "summary": "Bike was washed, then the charge port read wet at plug in (CHG-701). Charging tripped at 96 s with an isolation fault (CHG-702). Humidity was above 95% and there was no impact. Per SB-2026-04, dry the port and replace the seal. Water from washing is excluded under W7, so this is not covered.",
+    "warranty": {
+      "clause": "W7",
+      "decision": "not_covered",
+      "reason": "Charge port read wet at plug in with humidity at or above 95%: water from washing is excluded."
+    }
+  },
+  "ride_log_sha256": "bfe9d9aeb670643b2dcc09f8ff6b2c4400cbcf0b076008ca23855e3dcbc96e43",
+  "run": {
+    "cost_usd": 0.02678,
+    "duration_ms": 9728,
+    "input_tokens": 20011,
+    "model": "claude-sonnet-5-5",
+    "num_turns": 7,
+    "output_tokens": 1112
+  },
+  "scenario": "water-ingress",
+  "source": {
+    "kind": "live",
+    "model": "claude-sonnet-5-5",
+    "recorded_at": "2026-10-11"
+  },
+  "spans": [
+    {
+      "duration_ms": 0.68,
+      "input": {},
+      "name": "analyze_telemetry",
+      "ok": true,
+      "output": {
+        "events": [
+          {
+            "kind": "humidity_over_95pct",
+            "peak_pct": 98.5,
+            "window": "t=0-599s"
+          },
+          {
+            "kind": "charging_stopped",
+            "power_before_kw": 10.72,
+            "soc_pct": 32.88,
+            "window": "t=96-96s"
+          }
+        ],
+        "fault_codes": [
+          {
+            "code": "CHG-701",
+            "t": 2
+          },
+          {
+            "code": "CHG-702",
+            "t": 96
+          }
+        ],
+        "firmware": "4.1.2",
+        "samples": 600,
+        "stats": {
+          "cell_delta_mv": {
+            "max": 20.0,
+            "mean": 20.0,
+            "min": 20.0
+          },
+          "cell_max_v": {
+            "max": 3.759,
+            "mean": 3.718,
+            "min": 3.677
+          },
+          "cell_min_v": {
+            "max": 3.739,
+            "mean": 3.698,
+            "min": 3.657
+          },
+          "charge_power_kw": {
+            "max": 11.295,
+            "mean": 1.758,
+            "min": 0.0
+          },
+          "coolant_flow_lpm": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "coolant_temp_c": {
+            "max": 24.0,
+            "mean": 24.0,
+            "min": 24.0
+          },
+          "current_a": {
+            "max": 0.0,
+            "mean": -4.984,
+            "min": -32.063
+          },
+          "humidity_pct": {
+            "max": 98.498,
+            "mean": 97.469,
+            "min": 96.502
+          },
+          "imu_peak_g": {
+            "max": 0.05,
+            "mean": 0.05,
+            "min": 0.05
+          },
+          "inverter_temp_c": {
+            "max": 25.0,
+            "mean": 25.0,
+            "min": 25.0
+          },
+          "motor_temp_c": {
+            "max": 26.0,
+            "mean": 26.0,
+            "min": 26.0
+          },
+          "pack_temp_c": {
+            "max": 26.995,
+            "mean": 25.497,
+            "min": 24.0
+          },
+          "pack_v": {
+            "max": 359.931,
+            "mean": 355.988,
+            "min": 352.045
+          },
+          "soc_pct": {
+            "max": 32.878,
+            "mean": 32.729,
+            "min": 31.02
+          },
+          "speed_kmh": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "throttle_pct": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          }
+        },
+        "window": "t=0-599s"
+      },
+      "seq": 1,
+      "started_at": "2026-10-11T04:04:47.114385+00:00"
+    },
+    {
+      "duration_ms": 0.04,
+      "input": {
+        "code": "CHG-701"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Ask about washing before charging. Check humidity at plug in.",
+        "code": "CHG-701",
+        "found": true,
+        "likely_causes": [
+          "Water in the charge port",
+          "Pressure washing near the port"
+        ],
+        "logged_at_s": [
+          2
+        ],
+        "meaning": "The charge port moisture sensor read wet at plug in.",
+        "system": "charging",
+        "title": "Charge port moisture detected"
+      },
+      "seq": 2,
+      "started_at": "2026-10-11T04:04:48.417500+00:00"
+    },
+    {
+      "duration_ms": 0.02,
+      "input": {
+        "code": "CHG-702"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Dry the port and repeat the isolation test.",
+        "code": "CHG-702",
+        "found": true,
+        "likely_causes": [
+          "Water in the charge port",
+          "Damaged port"
+        ],
+        "logged_at_s": [
+          96
+        ],
+        "meaning": "Isolation fault between charge pins and chassis during charging.",
+        "system": "charging",
+        "title": "Charge port isolation fault"
+      },
+      "seq": 3,
+      "started_at": "2026-10-11T04:04:48.795553+00:00"
+    },
+    {
+      "duration_ms": 0.34,
+      "input": {
+        "query": "charge port water ingress washed charging trips CHG-701 CHG-702"
+      },
+      "name": "search_service_bulletins",
+      "ok": true,
+      "output": {
+        "model": "Kestrel SM",
+        "results": [
+          {
+            "fix": "Dry the charge port, replace the port seal. Pressure washing at the charge port is excluded by the owner manual.",
+            "id": "SB-2026-04",
+            "labour_hours": 0.6,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Charge port seal",
+                "part_number": "71-0404",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "charging stops after washing",
+              "CHG-701",
+              "CHG-702",
+              "moisture at plug in"
+            ],
+            "title": "Charge port seal and washing guidance"
+          },
+          {
+            "fix": "Update the battery controller and vehicle controller firmware to 4.1.0 or later. No parts.",
+            "id": "SB-2026-06",
+            "labour_hours": 0.5,
+            "min_firmware": "4.1.0",
+            "parts": [],
+            "symptoms": [
+              "charging stops at 80%",
+              "BMS-210",
+              "charge power drops to zero at 80 percent"
+            ],
+            "title": "Charge stops at 80 percent on firmware before 4.1.0",
+            "vehicle_firmware_below_minimum": false
+          }
+        ]
+      },
+      "seq": 4,
+      "started_at": "2026-10-11T04:04:48.851794+00:00"
+    },
+    {
+      "duration_ms": 0.03,
+      "input": {
+        "cause_code": "CHARGE_PORT_WATER_INGRESS",
+        "confidence": 0.9
+      },
+      "name": "check_warranty",
+      "ok": true,
+      "output": {
+        "clause": "W7",
+        "clause_text": "Water ingress caused by pressure washing at the charge port or electrical connectors is not covered.",
+        "decision": "not_covered",
+        "facts": {
+          "age_months": 6,
+          "fault_codes": [
+            "CHG-701",
+            "CHG-702"
+          ],
+          "firmware": "4.1.2",
+          "first_fault_t": 2,
+          "max_g_before_first_fault": 0.05,
+          "odometer_km": 1870,
+          "water_exposure": true
+        },
+        "reason": "Charge port read wet at plug in with humidity at or above 95%: water from washing is excluded."
+      },
+      "seq": 5,
+      "started_at": "2026-10-11T04:04:50.144415+00:00"
+    }
+  ]
+}

@@ -1,0 +1,354 @@
+{
+  "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
+  "result": {
+    "evidence": [
+      {
+        "detail": "Throttle signal implausible; logged 7 times (t=77,151,233,302,371,446,529s). Dropouts that line up with chassis shocks point to the connector.",
+        "kind": "fault_code",
+        "ref": "THR-601"
+      },
+      {
+        "detail": "Throttle dropout at 57.57 km/h with IMU peak 2.8 g; six more dropouts at 2.67-3.08 g (t=151-529s).",
+        "kind": "telemetry",
+        "ref": "t=77-77s"
+      },
+      {
+        "detail": "No water exposure; pack, cell and coolant values normal, so no competing cause. Firmware 4.1.2.",
+        "kind": "telemetry",
+        "ref": "t=0-599s"
+      },
+      {
+        "detail": "Throttle connector retention clip: cuts over bumps with THR-601. Fit new clip and reseat connector.",
+        "kind": "bulletin",
+        "ref": "SB-2026-05"
+      },
+      {
+        "detail": "Covered: 9 months and 3,320 km, inside 24 months.",
+        "kind": "policy",
+        "ref": "W1"
+      }
+    ],
+    "repair": {
+      "labour_hours": 0.5,
+      "parts": [
+        {
+          "description": "Throttle connector retention clip",
+          "part_number": "33-0515",
+          "qty": 1
+        }
+      ]
+    },
+    "root_cause": {
+      "code": "THROTTLE_CONNECTOR_INTERMITTENT",
+      "component": "Throttle connector",
+      "confidence": 0.9,
+      "title": "Intermittent throttle connector causing torque cut over bumps"
+    },
+    "schema_version": "1",
+    "summary": "Seven THR-601 throttle faults each coincided with a 2.7-3.1 g shock at speed. That points to a loose throttle connector, not the sensor. Bulletin SB-2026-05 applies: fit a new retention clip and reseat the connector. The bike is inside the 24-month warranty, so the repair is covered.",
+    "warranty": {
+      "clause": "W1",
+      "decision": "covered",
+      "reason": "General coverage: vehicle is 9 months and 3,320 km, inside 24 months."
+    }
+  },
+  "ride_log_sha256": "98b6b8513d383d3fd41e1a8f2331fca8fd5ce8f075571acf9e75d4d55c107be5",
+  "run": {
+    "cost_usd": 0.02615,
+    "duration_ms": 10069,
+    "input_tokens": 15671,
+    "model": "claude-sonnet-5-5",
+    "num_turns": 6,
+    "output_tokens": 1078
+  },
+  "scenario": "throttle-connector",
+  "source": {
+    "kind": "live",
+    "model": "claude-sonnet-5-5",
+    "recorded_at": "2026-10-11"
+  },
+  "spans": [
+    {
+      "duration_ms": 0.63,
+      "input": {},
+      "name": "analyze_telemetry",
+      "ok": true,
+      "output": {
+        "events": [
+          {
+            "imu_peak_g": 2.8,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 57.57,
+            "window": "t=77-77s"
+          },
+          {
+            "imu_peak_g": 3.08,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 36.51,
+            "window": "t=151-151s"
+          },
+          {
+            "imu_peak_g": 2.96,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 64.92,
+            "window": "t=233-233s"
+          },
+          {
+            "imu_peak_g": 2.77,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 65.79,
+            "window": "t=302-302s"
+          },
+          {
+            "imu_peak_g": 2.67,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 49.76,
+            "window": "t=371-371s"
+          },
+          {
+            "imu_peak_g": 2.92,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 45.45,
+            "window": "t=446-446s"
+          },
+          {
+            "imu_peak_g": 2.78,
+            "kind": "throttle_dropout_at_speed",
+            "speed_kmh": 61.44,
+            "window": "t=529-529s"
+          }
+        ],
+        "fault_codes": [
+          {
+            "code": "THR-601",
+            "t": 77
+          },
+          {
+            "code": "THR-601",
+            "t": 151
+          },
+          {
+            "code": "THR-601",
+            "t": 233
+          },
+          {
+            "code": "THR-601",
+            "t": 302
+          },
+          {
+            "code": "THR-601",
+            "t": 371
+          },
+          {
+            "code": "THR-601",
+            "t": 446
+          },
+          {
+            "code": "THR-601",
+            "t": 529
+          }
+        ],
+        "firmware": "4.1.2",
+        "samples": 600,
+        "stats": {
+          "cell_delta_mv": {
+            "max": 35.0,
+            "mean": 29.97,
+            "min": 24.0
+          },
+          "cell_max_v": {
+            "max": 3.892,
+            "mean": 3.589,
+            "min": 3.271
+          },
+          "cell_min_v": {
+            "max": 3.857,
+            "mean": 3.559,
+            "min": 3.244
+          },
+          "charge_power_kw": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "coolant_flow_lpm": {
+            "max": 6.249,
+            "mean": 5.996,
+            "min": 5.751
+          },
+          "coolant_temp_c": {
+            "max": 63.293,
+            "mean": 49.009,
+            "min": 36.014
+          },
+          "current_a": {
+            "max": 303.556,
+            "mean": 209.949,
+            "min": 12.0
+          },
+          "humidity_pct": {
+            "max": 53.997,
+            "mean": 51.983,
+            "min": 50.009
+          },
+          "imu_peak_g": {
+            "max": 3.075,
+            "mean": 1.012,
+            "min": 0.6
+          },
+          "inverter_temp_c": {
+            "max": 89.457,
+            "mean": 72.88,
+            "min": 40.213
+          },
+          "motor_temp_c": {
+            "max": 118.803,
+            "mean": 95.55,
+            "min": 48.316
+          },
+          "pack_temp_c": {
+            "max": 32.108,
+            "mean": 29.492,
+            "min": 26.856
+          },
+          "pack_v": {
+            "max": 372.012,
+            "mean": 343.071,
+            "min": 312.789
+          },
+          "soc_pct": {
+            "max": 85.878,
+            "mean": 51.441,
+            "min": 17.111
+          },
+          "speed_kmh": {
+            "max": 72.021,
+            "mean": 55.921,
+            "min": 36.505
+          },
+          "throttle_pct": {
+            "max": 83.599,
+            "mean": 55.053,
+            "min": 0.0
+          }
+        },
+        "window": "t=0-599s"
+      },
+      "seq": 1,
+      "started_at": "2026-10-11T04:04:35.609656+00:00"
+    },
+    {
+      "duration_ms": 3.39,
+      "input": {
+        "code": "THR-601"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Dropouts that line up with chassis shocks point to the connector, not the sensor.",
+        "code": "THR-601",
+        "found": true,
+        "likely_causes": [
+          "Throttle connector not latched",
+          "Damaged throttle harness",
+          "Throttle sensor failure"
+        ],
+        "logged_at_s": [
+          77,
+          151,
+          233,
+          302,
+          371,
+          446,
+          529
+        ],
+        "meaning": "The two throttle tracks disagreed for more than 100 ms and torque was cut.",
+        "system": "controls",
+        "title": "Throttle signal implausible"
+      },
+      "seq": 2,
+      "started_at": "2026-10-11T04:04:36.211216+00:00"
+    },
+    {
+      "duration_ms": 0.11,
+      "input": {
+        "model": "Kestrel SM",
+        "query": "throttle cuts out rough ground THR-601"
+      },
+      "name": "search_service_bulletins",
+      "ok": true,
+      "output": {
+        "model": "Kestrel SM",
+        "results": [
+          {
+            "fix": "Fit the new retention clip and reseat the throttle connector.",
+            "id": "SB-2026-05",
+            "labour_hours": 0.5,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Throttle connector retention clip",
+                "part_number": "33-0515",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "throttle cuts in and out over bumps",
+              "THR-601"
+            ],
+            "title": "Throttle connector retention clip"
+          },
+          {
+            "fix": "Replace the inverter current sensor board and run the phase calibration.",
+            "id": "SB-2026-02",
+            "labour_hours": 2.0,
+            "min_firmware": null,
+            "parts": [
+              {
+                "description": "Inverter current sensor board",
+                "part_number": "52-1144",
+                "qty": 1
+              }
+            ],
+            "symptoms": [
+              "motor cuts out and restarts at full throttle",
+              "INV-301",
+              "current spikes above 450 A"
+            ],
+            "title": "Inverter phase current sensor offset"
+          }
+        ]
+      },
+      "seq": 3,
+      "started_at": "2026-10-11T04:04:36.226291+00:00"
+    },
+    {
+      "duration_ms": 0.03,
+      "input": {
+        "cause_code": "THROTTLE_CONNECTOR_INTERMITTENT",
+        "confidence": 0.9
+      },
+      "name": "check_warranty",
+      "ok": true,
+      "output": {
+        "clause": "W1",
+        "clause_text": "Defects in materials or workmanship are covered for 24 months from the sale date.",
+        "decision": "covered",
+        "facts": {
+          "age_months": 9,
+          "fault_codes": [
+            "THR-601"
+          ],
+          "firmware": "4.1.2",
+          "first_fault_t": 77,
+          "max_g_before_first_fault": 2.8,
+          "odometer_km": 3320,
+          "water_exposure": false
+        },
+        "reason": "General coverage: vehicle is 9 months and 3,320 km, inside 24 months."
+      },
+      "seq": 4,
+      "started_at": "2026-10-11T04:04:37.874359+00:00"
+    }
+  ]
+}

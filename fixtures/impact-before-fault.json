@@ -1,0 +1,307 @@
+{
+  "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
+  "result": {
+    "evidence": [
+      {
+        "detail": "Impact event peak 9.4 g at 31 km/h (limit 6 g); imu_peak_g otherwise ~0.6-1 g.",
+        "kind": "telemetry",
+        "ref": "t=318s"
+      },
+      {
+        "detail": "Impact event recorded at t=318s, above 6 g. Later faults follow the impact.",
+        "kind": "fault_code",
+        "ref": "IMU-801"
+      },
+      {
+        "detail": "Display bus timeout at t=322s, 4 s after impact. Check harness and mount for impact damage.",
+        "kind": "fault_code",
+        "ref": "DSP-901"
+      },
+      {
+        "detail": "Body bus off at t=323s; possible harness short or failed node.",
+        "kind": "fault_code",
+        "ref": "CAN-950"
+      },
+      {
+        "detail": "Impact of 9.4 g recorded within 60 s before the first fault (limit 6 g).",
+        "kind": "policy",
+        "ref": "W6"
+      }
+    ],
+    "repair": {
+      "labour_hours": 0,
+      "parts": []
+    },
+    "root_cause": {
+      "code": "IMPACT_DAMAGE",
+      "component": "Dash display / body bus harness",
+      "confidence": 0.85,
+      "title": "Impact damage to display harness or dash"
+    },
+    "schema_version": "1",
+    "summary": "A 9.4 g impact at t=318s was followed within seconds by a display bus timeout and a body bus-off fault. The blank dash most likely comes from impact damage to the display or its harness. No service bulletin matched, so no parts or labour are listed. Not covered under W6.",
+    "warranty": {
+      "clause": "W6",
+      "decision": "not_covered",
+      "reason": "Impact of 9.4 g recorded within 60 s before the first fault (limit 6 g)."
+    }
+  },
+  "ride_log_sha256": "ea6b307160be3e5737f9ea5d1c9c74b5c57b9886586b66878779757f51e969d0",
+  "run": {
+    "cost_usd": 0.02667,
+    "duration_ms": 9320,
+    "input_tokens": 19876,
+    "model": "claude-sonnet-5-5",
+    "num_turns": 8,
+    "output_tokens": 1121
+  },
+  "scenario": "impact-before-fault",
+  "source": {
+    "kind": "live",
+    "model": "claude-sonnet-5-5",
+    "recorded_at": "2026-10-11"
+  },
+  "spans": [
+    {
+      "duration_ms": 0.9,
+      "input": {},
+      "name": "analyze_telemetry",
+      "ok": true,
+      "output": {
+        "events": [
+          {
+            "kind": "impact_over_6g",
+            "peak_g": 9.4,
+            "speed_kmh": 31.0,
+            "window": "t=318-318s"
+          }
+        ],
+        "fault_codes": [
+          {
+            "code": "IMU-801",
+            "t": 318
+          },
+          {
+            "code": "IMU-802",
+            "t": 320
+          },
+          {
+            "code": "DSP-901",
+            "t": 322
+          },
+          {
+            "code": "CAN-950",
+            "t": 323
+          }
+        ],
+        "firmware": "4.1.2",
+        "samples": 600,
+        "stats": {
+          "cell_delta_mv": {
+            "max": 36.0,
+            "mean": 29.858,
+            "min": 24.0
+          },
+          "cell_max_v": {
+            "max": 3.899,
+            "mean": 3.609,
+            "min": 3.32
+          },
+          "cell_min_v": {
+            "max": 3.869,
+            "mean": 3.579,
+            "min": 3.287
+          },
+          "charge_power_kw": {
+            "max": 0.0,
+            "mean": 0.0,
+            "min": 0.0
+          },
+          "coolant_flow_lpm": {
+            "max": 6.25,
+            "mean": 6.001,
+            "min": 5.752
+          },
+          "coolant_temp_c": {
+            "max": 62.31,
+            "mean": 48.555,
+            "min": 36.014
+          },
+          "current_a": {
+            "max": 287.522,
+            "mean": 111.974,
+            "min": 4.0
+          },
+          "humidity_pct": {
+            "max": 53.998,
+            "mean": 51.925,
+            "min": 50.001
+          },
+          "imu_peak_g": {
+            "max": 9.4,
+            "mean": 1.03,
+            "min": 0.6
+          },
+          "inverter_temp_c": {
+            "max": 87.13,
+            "mean": 71.459,
+            "min": 40.179
+          },
+          "motor_temp_c": {
+            "max": 115.452,
+            "mean": 93.49,
+            "min": 48.265
+          },
+          "pack_temp_c": {
+            "max": 32.106,
+            "mean": 29.491,
+            "min": 26.883
+          },
+          "pack_v": {
+            "max": 372.634,
+            "mean": 345.035,
+            "min": 317.201
+          },
+          "soc_pct": {
+            "max": 85.897,
+            "mean": 52.899,
+            "min": 20.097
+          },
+          "speed_kmh": {
+            "max": 69.79,
+            "mean": 29.056,
+            "min": 0.0
+          },
+          "throttle_pct": {
+            "max": 78.819,
+            "mean": 28.677,
+            "min": 0.0
+          }
+        },
+        "window": "t=0-599s"
+      },
+      "seq": 1,
+      "started_at": "2026-10-11T04:04:13.208921+00:00"
+    },
+    {
+      "duration_ms": 0.03,
+      "input": {
+        "code": "IMU-801"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "An impact right before other faults means the faults follow the impact.",
+        "code": "IMU-801",
+        "found": true,
+        "likely_causes": [
+          "Crash or heavy impact"
+        ],
+        "logged_at_s": [
+          318
+        ],
+        "meaning": "The inertial unit measured an acceleration peak above 6 g.",
+        "system": "chassis",
+        "title": "Impact event recorded"
+      },
+      "seq": 2,
+      "started_at": "2026-10-11T04:04:14.455525+00:00"
+    },
+    {
+      "duration_ms": 0.02,
+      "input": {
+        "code": "DSP-901"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Inspect the display harness and mount for impact damage.",
+        "code": "DSP-901",
+        "found": true,
+        "likely_causes": [
+          "Display harness damage",
+          "Display failure"
+        ],
+        "logged_at_s": [
+          322
+        ],
+        "meaning": "The dash stopped answering on the body bus.",
+        "system": "body",
+        "title": "Display bus timeout"
+      },
+      "seq": 3,
+      "started_at": "2026-10-11T04:04:14.804483+00:00"
+    },
+    {
+      "duration_ms": 0.01,
+      "input": {
+        "code": "CAN-950"
+      },
+      "name": "lookup_fault_code",
+      "ok": true,
+      "output": {
+        "check": "Unplug nodes one by one.",
+        "code": "CAN-950",
+        "found": true,
+        "likely_causes": [
+          "Harness short",
+          "Failed node"
+        ],
+        "logged_at_s": [
+          323
+        ],
+        "meaning": "The body CAN bus went bus off.",
+        "system": "body",
+        "title": "Body bus off"
+      },
+      "seq": 4,
+      "started_at": "2026-10-11T04:04:14.869866+00:00"
+    },
+    {
+      "duration_ms": 0.11,
+      "input": {
+        "model": "Ridgeback MX",
+        "query": "display blank dash after impact IMU-801 DSP-901 CAN-950"
+      },
+      "name": "search_service_bulletins",
+      "ok": true,
+      "output": {
+        "model": "Ridgeback MX",
+        "results": []
+      },
+      "seq": 5,
+      "started_at": "2026-10-11T04:04:15.248065+00:00"
+    },
+    {
+      "duration_ms": 0.05,
+      "input": {
+        "cause_code": "IMPACT_DAMAGE",
+        "confidence": 0.85
+      },
+      "name": "check_warranty",
+      "ok": true,
+      "output": {
+        "clause": "W6",
+        "clause_text": "Damage caused by a crash or impact is not covered. An impact above 6 g recorded within 60 s before the first fault counts as impact damage.",
+        "decision": "not_covered",
+        "facts": {
+          "age_months": 6,
+          "fault_codes": [
+            "CAN-950",
+            "DSP-901",
+            "IMU-801",
+            "IMU-802"
+          ],
+          "firmware": "4.1.2",
+          "first_fault_t": 322,
+          "max_g_before_first_fault": 9.4,
+          "odometer_km": 2440,
+          "water_exposure": false
+        },
+        "reason": "Impact of 9.4 g recorded within 60 s before the first fault (limit 6 g)."
+      },
+      "seq": 6,
+      "started_at": "2026-10-11T04:04:16.496598+00:00"
+    }
+  ]
+}

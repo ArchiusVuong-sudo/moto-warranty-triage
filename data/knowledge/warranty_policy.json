@@ -1,0 +1,13 @@
+{
+  "_note": "Synthetic 8-clause warranty policy for a demo.",
+  "clauses": [
+    {"id": "W1", "title": "General coverage", "text": "Defects in materials or workmanship are covered for 24 months from the sale date."},
+    {"id": "W2", "title": "Battery pack and battery controller", "text": "The battery pack and battery controller are covered for 36 months or 30,000 km from the sale date, whichever comes first."},
+    {"id": "W3", "title": "Drive unit", "text": "Motor and inverter are covered for 24 months from the sale date."},
+    {"id": "W4", "title": "Cooling system", "text": "Coolant pump, radiator and hoses are covered for 24 months from the sale date."},
+    {"id": "W5", "title": "Software", "text": "Firmware defects fixed by a published service bulletin are covered at no charge for the life of the vehicle."},
+    {"id": "W6", "title": "Exclusion: impact damage", "text": "Damage caused by a crash or impact is not covered. An impact above 6 g recorded within 60 s before the first fault counts as impact damage."},
+    {"id": "W7", "title": "Exclusion: water from pressure washing", "text": "Water ingress caused by pressure washing at the charge port or electrical connectors is not covered."},
+    {"id": "W8", "title": "Exclusion: wear and modifications", "text": "Wear items (tyres, chain, sprockets, brake pads) and owner modifications are not covered."}
+  ]
+}
