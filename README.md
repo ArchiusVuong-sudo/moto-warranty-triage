@@ -115,7 +115,7 @@ npm run test:live      # opt-in: one real model run (LIVE=1)
 ```
 
 - API, 54 tests: auth (`401`, `403`, `404` across dealers, hashed keys), idempotency (replay, `422` on a changed body, rollback), keyset pagination under concurrent inserts, tampered and mismatched cursors, v1 deprecation headers, the `429` burst, the outbox and inbox dedup, the dispatcher against a fake NDJSON service (retries, dead letters, contract violations, max attempts, the breaker spending no attempts, expired leases), `If-Match` and `412`, migration checksums, and unit tests for the cursor, backoff, breaker, token bucket and contract.
-- Python service, 79 tests: every agent isolation option, the env allowlist, each tool with valid and invalid input, every warranty clause, ride-log validation, the shared contract, the guardrail, fixture labels and tool drift, the replay eval, and the HTTP service (stream order, idempotency store, lost reply, `409` while running, a run taken over after a crash).
+- Python service, 78 tests: every agent isolation option, the env allowlist, each tool with valid and invalid input, every warranty clause, ride-log validation, the shared contract, the guardrail, fixture labels and tool drift, the replay eval, and the HTTP service (stream order, idempotency store, lost reply, `409` while running, a run taken over after a crash).
 - End to end, 2 tests: a dealer files a claim twice with one key, the agent's spans stream in, the engineer approves with an edit and the inbox row turns Approved; a corrupt export lands in the dead-letter list.
 
 ## Notes

@@ -8,7 +8,7 @@ from typing import Any
 import httpx
 import pytest
 
-from triage_service.app import ReplyLost, TriageService, create_app
+from triage_service.app import TriageService, create_app
 from triage_service.contract import contract_errors
 from triage_service.store import RunStore
 
@@ -103,8 +103,8 @@ async def test_replay_refuses_unrecorded_input(client, make_request):
 async def test_lost_reply_is_recovered_from_the_store(client, make_request, service):
     body = body_for(make_request, "firmware-charge-stop")
     assert (await client.post("/admin/drills/lose-next-reply")).json() == {"armed": True}
-    with pytest.raises((ReplyLost, httpx.HTTPError)):
-        await post(client, body, key="lose-1")
+    status, lost, _ = await post(client, body, key="lose-1")
+    assert status == 200 and [x["type"] for x in lost if x["type"] != "span"] == ["accepted"]
     stored = service.store.get("lose-1")
     assert stored is not None and stored.status == "done"
     _, lines, _ = await post(client, body, key="lose-1")
@@ -136,23 +136,3 @@ def test_store_begin_states():
     s.complete("a", {"r": 1}, [{"name": "t"}], {"m": 1})
     state, stored = s.begin("a", "h1", "boot", "replay")
     assert state == "done" and stored is not None and stored.result == {"r": 1}
-
-
-def test_lose_reply_drill_logs_one_line_not_a_traceback():
-    import logging
-    import sys
-
-    from triage_service.app import DrillLogFilter, ReplyLost
-
-    try:
-        raise ReplyLost("fault drill: reply dropped after the result was stored")
-    except ReplyLost:
-        drill = logging.LogRecord("uvicorn.error", logging.ERROR, __file__, 1, "Exception in ASGI application", (), sys.exc_info())
-    try:
-        raise ValueError("real bug")
-    except ValueError:
-        real = logging.LogRecord("uvicorn.error", logging.ERROR, __file__, 1, "Exception in ASGI application", (), sys.exc_info())
-    f = DrillLogFilter()
-    assert f.filter(drill) and f.filter(real)
-    assert drill.exc_info is None and drill.levelname == "WARNING" and "reply dropped" in drill.getMessage()
-    assert real.exc_info is not None and real.levelname == "ERROR"

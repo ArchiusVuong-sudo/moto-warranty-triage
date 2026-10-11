@@ -30,6 +30,8 @@ from .replay import Fixture, fixture_index
 from .store import RunStore
 from .tools import TriageContext
 
+log = logging.getLogger("triage_service")
+
 PROBLEM = "application/problem+json"
 
 
@@ -100,23 +102,6 @@ class TriageService:
 
 def ndjson(line: dict[str, Any]) -> bytes:
     return (json.dumps(line, separators=(",", ":")) + "\n").encode()
-
-
-class ReplyLost(Exception):
-    """Raised inside the stream to drop the connection on purpose (fault drill)."""
-
-
-class DrillLogFilter(logging.Filter):
-    """The lose-reply drill aborts the stream by raising ReplyLost, which the server
-    logs as an unhandled exception. Log it as one intentional line instead."""
-
-    def filter(self, record: logging.LogRecord) -> bool:
-        exc = record.exc_info[1] if record.exc_info else None
-        if isinstance(exc, ReplyLost):
-            record.msg, record.args = str(exc), ()
-            record.exc_info, record.exc_text = None, None
-            record.levelno, record.levelname = logging.WARNING, "WARNING"
-        return True
 
 
 def create_app(service: TriageService) -> FastAPI:
@@ -210,8 +195,11 @@ def create_app(service: TriageService) -> FastAPI:
                 if line is None:
                     return
                 if line["type"] == "result" and service.drills.lose_next_reply:
+                    # Fault drill: the result is already in the store; end the stream without it,
+                    # as a reply lost on the way back would look to the caller.
                     service.drills.lose_next_reply = False
-                    raise ReplyLost("fault drill: reply dropped after the result was stored")
+                    log.warning("fault drill: reply dropped after the result was stored (key %s)", idempotency_key)
+                    return
                 yield ndjson(line)
 
         return StreamingResponse(live_stream(), media_type="application/x-ndjson")

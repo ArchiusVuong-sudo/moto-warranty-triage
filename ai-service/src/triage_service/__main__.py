@@ -12,7 +12,7 @@ import time
 import uvicorn
 
 from .agent import sweep_run_dirs
-from .app import DrillLogFilter, TriageService, create_app
+from .app import TriageService, create_app
 from .config import Settings
 from .env import scrub_process_env
 from .store import RunStore
@@ -40,7 +40,7 @@ def main() -> None:
     if settings.parent_pid:
         watch_parent(settings.parent_pid)
     sweep_run_dirs()
-    logging.getLogger("uvicorn.error").addFilter(DrillLogFilter())
+    logging.basicConfig(level=logging.WARNING, format="%(levelname)s:  %(message)s")
     store = RunStore(settings.db_path)
     app = create_app(TriageService(settings, store))
     print(f"triage service on 127.0.0.1:{settings.port} mode={settings.mode}", file=sys.stderr, flush=True)
