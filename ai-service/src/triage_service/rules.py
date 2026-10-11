@@ -76,14 +76,12 @@ def decide(cause_code: str, confidence: float, facts: VehicleFacts, kb: Knowledg
 
     if cause_code == "FIRMWARE_BELOW_MINIMUM":
         required = [
-            b for b in kb.bulletins if b.get("min_firmware") and parse_version(facts.firmware) < parse_version(b["min_firmware"])
+            b for b in kb.bulletins if b.get("min_firmware") and facts.model in b["models"] and parse_version(facts.firmware) < parse_version(b["min_firmware"])
         ]
         if required:
             ids = ", ".join(b["id"] for b in required)
             return WarrantyDecision("covered", "W5", f"Firmware {facts.firmware} is below the minimum in {ids}; the update is covered at no charge.")
-        return WarrantyDecision(
-            "needs_inspection", "W5", f"Firmware {facts.firmware} meets every bulletin minimum, so a firmware defect is not shown."
-        )
+        return WarrantyDecision("needs_inspection", "W5", f"Firmware {facts.firmware} meets every bulletin minimum, so a firmware defect is not shown.")
 
     clause, months, km = COMPONENT_CLAUSE[cause_code]
     if facts.age_months > months:

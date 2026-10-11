@@ -21,7 +21,7 @@ from pydantic import ValidationError
 
 from .agent import ModelRunError, TransientModelError
 from .config import Settings
-from .contract import ContractError, load_schema
+from .contract import ContractError
 from .knowledge import Knowledge, load_knowledge
 from .models import RideLogError, TriageRequest, parse_ride_log, vehicle_facts
 from .pipeline import triage_once
@@ -58,7 +58,6 @@ class TriageService:
         self.drills = Drills()
         self.runs: dict[str, RunHandle] = {}
         self.tasks: set[asyncio.Task[None]] = set()
-        self.schema = load_schema()
 
     async def execute(self, key: str, ctx: TriageContext, fixture: Fixture | None, handle: RunHandle, trace_id: str | None) -> None:
         spans: list[dict[str, Any]] = []

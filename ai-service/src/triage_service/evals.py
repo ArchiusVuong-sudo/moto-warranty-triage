@@ -16,7 +16,7 @@ import asyncio
 import json
 import sys
 from dataclasses import replace
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -81,7 +81,7 @@ async def run_eval(live: bool) -> dict[str, Any]:
     return {
         "mode": "live" if live else "replay",
         "model": settings.model if live else sorted({c["source"]["model"] for c in scored if c.get("source")}),
-        "run_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "run_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "cases": cases,
         "totals": {k: f"{v}/{len(scored)}" for k, v in totals.items()},
         "mean_duration_ms": round(sum(c["duration_ms"] or 0 for c in scored) / max(1, len(scored))),

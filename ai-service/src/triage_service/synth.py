@@ -10,9 +10,9 @@ from __future__ import annotations
 import json
 import math
 import random
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable
 
 from .config import DATA_DIR
 
@@ -269,14 +269,111 @@ def build_corrupt(rng: random.Random) -> tuple[list[Sample], list[dict[str, obje
 
 
 SCENARIOS: list[Scenario] = [
-    Scenario("cell-imbalance", "Power cuts under hard acceleration", "Customer reports the bike cuts power for a second under hard acceleration out of corners. Happens several times per ride.", "Ridgeback MX", "DEMORMX2500000101", 11, 4210, "4.1.2", {"cause": "BATTERY_CELL_IMBALANCE", "decision": "covered", "clause": "W2"}, build_cell_imbalance, 101),
-    Scenario("inverter-overcurrent", "Motor cuts out and restarts at full throttle", "At full throttle the motor cuts out and comes back a moment later. No warning light stays on.", "Talus EN", "DEMOTEN2500000102", 8, 2980, "4.1.2", {"cause": "INVERTER_OVERCURRENT", "decision": "covered", "clause": "W3"}, build_inverter_overcurrent, 102),
-    Scenario("coolant-pump", "Overheat warning on long climbs", "Overheat warning and reduced power on a long climb, then limp mode until restart.", "Talus EN", "DEMOTEN2400000103", 15, 7350, "4.1.2", {"cause": "COOLANT_PUMP_FAILURE", "decision": "covered", "clause": "W4"}, build_coolant_pump, 103),
-    Scenario("water-ingress", "Charger trips after washing the bike", "Bike was washed this morning. Charging starts, then trips after about a minute and a half.", "Kestrel SM", "DEMOKSM2500000104", 6, 1870, "4.1.2", {"cause": "CHARGE_PORT_WATER_INGRESS", "decision": "not_covered", "clause": "W7"}, build_water_ingress, 104),
-    Scenario("throttle-connector", "Throttle cuts in and out over bumps", "Throttle cuts in and out on rough ground. Fine on smooth roads.", "Kestrel SM", "DEMOKSM2500000105", 9, 3320, "4.1.2", {"cause": "THROTTLE_CONNECTOR_INTERMITTENT", "decision": "covered", "clause": "W1"}, build_throttle_connector, 105),
-    Scenario("firmware-charge-stop", "Charging stops at 80%", "Charging always stops at 80 percent, on two different chargers.", "Ridgeback MX", "DEMORMX2400000106", 19, 9120, "3.9.4", {"cause": "FIRMWARE_BELOW_MINIMUM", "decision": "covered", "clause": "W5"}, build_firmware, 106),
-    Scenario("impact-before-fault", "Display dead after a ride", "Display went blank during a trail ride and the bike will not show anything on the dash.", "Ridgeback MX", "DEMORMX2500000107", 7, 2440, "4.1.2", {"cause": "IMPACT_DAMAGE", "decision": "not_covered", "clause": "W6"}, build_impact, 107),
-    Scenario("corrupt-export", "Corrupt telemetry export", "Power cuts under acceleration. Dealer tool crashed during the export.", "Talus EN", "DEMOTEN2500000108", 10, 3900, "4.1.2", {"cause": "REJECTED_INPUT", "decision": "dead_letter", "clause": "-"}, build_corrupt, 108, corrupt=True),
+    Scenario(
+        "cell-imbalance",
+        "Power cuts under hard acceleration",
+        "Customer reports the bike cuts power for a second under hard acceleration out of corners. Happens several times per ride.",
+        "Ridgeback MX",
+        "DEMORMX2500000101",
+        11,
+        4210,
+        "4.1.2",
+        {"cause": "BATTERY_CELL_IMBALANCE", "decision": "covered", "clause": "W2"},
+        build_cell_imbalance,
+        101,
+    ),
+    Scenario(
+        "inverter-overcurrent",
+        "Motor cuts out and restarts at full throttle",
+        "At full throttle the motor cuts out and comes back a moment later. No warning light stays on.",
+        "Talus EN",
+        "DEMOTEN2500000102",
+        8,
+        2980,
+        "4.1.2",
+        {"cause": "INVERTER_OVERCURRENT", "decision": "covered", "clause": "W3"},
+        build_inverter_overcurrent,
+        102,
+    ),
+    Scenario(
+        "coolant-pump",
+        "Overheat warning on long climbs",
+        "Overheat warning and reduced power on a long climb, then limp mode until restart.",
+        "Talus EN",
+        "DEMOTEN2400000103",
+        15,
+        7350,
+        "4.1.2",
+        {"cause": "COOLANT_PUMP_FAILURE", "decision": "covered", "clause": "W4"},
+        build_coolant_pump,
+        103,
+    ),
+    Scenario(
+        "water-ingress",
+        "Charger trips after washing the bike",
+        "Bike was washed this morning. Charging starts, then trips after about a minute and a half.",
+        "Kestrel SM",
+        "DEMOKSM2500000104",
+        6,
+        1870,
+        "4.1.2",
+        {"cause": "CHARGE_PORT_WATER_INGRESS", "decision": "not_covered", "clause": "W7"},
+        build_water_ingress,
+        104,
+    ),
+    Scenario(
+        "throttle-connector",
+        "Throttle cuts in and out over bumps",
+        "Throttle cuts in and out on rough ground. Fine on smooth roads.",
+        "Kestrel SM",
+        "DEMOKSM2500000105",
+        9,
+        3320,
+        "4.1.2",
+        {"cause": "THROTTLE_CONNECTOR_INTERMITTENT", "decision": "covered", "clause": "W1"},
+        build_throttle_connector,
+        105,
+    ),
+    Scenario(
+        "firmware-charge-stop",
+        "Charging stops at 80%",
+        "Charging always stops at 80 percent, on two different chargers.",
+        "Ridgeback MX",
+        "DEMORMX2400000106",
+        19,
+        9120,
+        "3.9.4",
+        {"cause": "FIRMWARE_BELOW_MINIMUM", "decision": "covered", "clause": "W5"},
+        build_firmware,
+        106,
+    ),
+    Scenario(
+        "impact-before-fault",
+        "Display dead after a ride",
+        "Display went blank during a trail ride and the bike will not show anything on the dash.",
+        "Ridgeback MX",
+        "DEMORMX2500000107",
+        7,
+        2440,
+        "4.1.2",
+        {"cause": "IMPACT_DAMAGE", "decision": "not_covered", "clause": "W6"},
+        build_impact,
+        107,
+    ),
+    Scenario(
+        "corrupt-export",
+        "Corrupt telemetry export",
+        "Power cuts under acceleration. Dealer tool crashed during the export.",
+        "Talus EN",
+        "DEMOTEN2500000108",
+        10,
+        3900,
+        "4.1.2",
+        {"cause": "REJECTED_INPUT", "decision": "dead_letter", "clause": "-"},
+        build_corrupt,
+        108,
+        corrupt=True,
+    ),
 ]
 
 

@@ -139,7 +139,7 @@ def parse_ride_log(log: RideLogIn, max_errors: int = 8) -> Telemetry:
             errors.append(f"row {i}: {len(row)} values, expected {width}")
             continue
         bad = False
-        for c, v in zip(log.columns, row):
+        for c, v in zip(log.columns, row, strict=True):
             if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v):
                 errors.append(f"row {i}: column {c} is not a finite number ({v!r})")
                 bad = True
@@ -167,6 +167,7 @@ def months_between(start: date, end: date) -> int:
 class VehicleFacts:
     """Facts the warranty rules use. Computed from the request, never from the model."""
 
+    model: str
     age_months: int
     odometer_km: int
     firmware: str
@@ -177,6 +178,7 @@ class VehicleFacts:
 
     def as_dict(self) -> dict[str, Any]:
         return {
+            "model": self.model,
             "age_months": self.age_months,
             "odometer_km": self.odometer_km,
             "firmware": self.firmware,
@@ -198,6 +200,7 @@ def vehicle_facts(req: TriageRequest, tel: Telemetry) -> VehicleFacts:
     early_humidity = max(tel.series["humidity_pct"][: 30 * tel.hz], default=0.0)
     codes = tuple(sorted({f.code for f in tel.faults}))
     return VehicleFacts(
+        model=req.vehicle.model,
         age_months=months_between(req.vehicle.sale_date, req.filed_at.date()),
         odometer_km=req.vehicle.odometer_km,
         firmware=tel.firmware,

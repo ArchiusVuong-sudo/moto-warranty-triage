@@ -11,7 +11,7 @@ import json
 import sqlite3
 import threading
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
@@ -49,7 +49,7 @@ class StoredRun:
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 class RunStore:
@@ -65,13 +65,10 @@ class RunStore:
         with self._lock:
             self._db.execute("BEGIN IMMEDIATE")
             try:
-                row = self._db.execute(
-                    "SELECT request_hash, status, boot_id FROM runs WHERE idempotency_key = ?", (key,)
-                ).fetchone()
+                row = self._db.execute("SELECT request_hash, status, boot_id FROM runs WHERE idempotency_key = ?", (key,)).fetchone()
                 if row is None:
                     self._db.execute(
-                        "INSERT INTO runs (idempotency_key, request_hash, status, boot_id, mode, created_at, updated_at)"
-                        " VALUES (?, ?, 'running', ?, ?, ?, ?)",
+                        "INSERT INTO runs (idempotency_key, request_hash, status, boot_id, mode, created_at, updated_at) VALUES (?, ?, 'running', ?, ?, ?, ?)",
                         (key, request_hash, boot_id, mode, _now(), _now()),
                     )
                     self._db.execute("COMMIT")
@@ -112,9 +109,7 @@ class RunStore:
             )
 
     def get(self, key: str) -> StoredRun | None:
-        row = self._db.execute(
-            "SELECT status, result_json, spans_json, run_json, error_json FROM runs WHERE idempotency_key=?", (key,)
-        ).fetchone()
+        row = self._db.execute("SELECT status, result_json, spans_json, run_json, error_json FROM runs WHERE idempotency_key=?", (key,)).fetchone()
         if row is None:
             return None
         status, result, spans, run, error = row
@@ -127,16 +122,15 @@ class RunStore:
         )
 
     def count_model_run(self, live: bool) -> None:
-        day = datetime.now(timezone.utc).date().isoformat()
+        day = datetime.now(UTC).date().isoformat()
         with self._lock:
             self._db.execute(
-                "INSERT INTO model_runs (day, live, total) VALUES (?, ?, 1)"
-                " ON CONFLICT(day) DO UPDATE SET live = live + excluded.live, total = total + 1",
+                "INSERT INTO model_runs (day, live, total) VALUES (?, ?, 1) ON CONFLICT(day) DO UPDATE SET live = live + excluded.live, total = total + 1",
                 (day, 1 if live else 0),
             )
 
     def model_runs(self) -> dict[str, int]:
-        day = datetime.now(timezone.utc).date().isoformat()
+        day = datetime.now(UTC).date().isoformat()
         today = self._db.execute("SELECT live, total FROM model_runs WHERE day=?", (day,)).fetchone() or (0, 0)
         total = self._db.execute("SELECT COALESCE(SUM(total), 0) FROM model_runs").fetchone()[0]
         return {"live_today": int(today[0]), "today": int(today[1]), "total": int(total)}

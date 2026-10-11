@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -26,7 +26,7 @@ def all_scenarios(data_dir: Path = DATA_DIR) -> list[dict[str, Any]]:
 
 def scenario_request(doc: dict[str, Any], filed_at: datetime | None = None, claim_number: str = "WC-DEMO-0001") -> TriageRequest:
     """The request the claims API would send for this scenario: sale date is relative to filing."""
-    filed = filed_at or datetime.now(timezone.utc)
+    filed = filed_at or datetime.now(UTC)
     sale = (filed - timedelta(days=round(30.44 * doc["vehicle"]["sale_months_ago"]))).date()
     return TriageRequest.model_validate(
         {

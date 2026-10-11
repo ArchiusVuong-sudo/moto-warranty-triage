@@ -65,7 +65,7 @@ class Settings:
     parent_pid: int | None
 
     @staticmethod
-    def from_env(env: dict[str, str] | None = None) -> "Settings":
+    def from_env(env: dict[str, str] | None = None) -> Settings:
         e = env if env is not None else dict(os.environ)
         parent = e.get("TRIAGE_PARENT_PID")
         return Settings(

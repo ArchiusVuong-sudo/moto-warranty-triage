@@ -47,7 +47,8 @@ def build_prompt(ctx: TriageContext) -> str:
     faults = ", ".join(f"{c} x{len(ts)} (first t={ts[0]}s)" for c, ts in sorted(counts.items(), key=lambda x: x[1][0])) or "none"
     return (
         f"Claim {req.claim_number}\n"
-        f"Bike: {req.vehicle.model}, VIN {req.vehicle.vin}, {ctx.facts.age_months} months old, {req.vehicle.odometer_km} km, firmware {ctx.telemetry.firmware}\n"
+        f"Bike: {req.vehicle.model}, VIN {req.vehicle.vin}, {ctx.facts.age_months} months old, "
+        f"{req.vehicle.odometer_km} km, firmware {ctx.telemetry.firmware}\n"
         f"Dealer complaint: {req.complaint}\n"
         f"Ride log: {ctx.telemetry.seconds} samples at {ctx.telemetry.hz} Hz. Fault codes: {faults}\n"
         "Triage this claim."
@@ -169,7 +170,7 @@ async def run_live(
             if contract_failures >= 2:
                 raise
             note = f"output broke the contract ({e.errors[0]}), running once more"
-        except asyncio.TimeoutError as e:
+        except TimeoutError as e:
             raise ModelRunError(f"model run took longer than {settings.run_timeout_s:g} s") from e
         except ModelRunError:
             raise

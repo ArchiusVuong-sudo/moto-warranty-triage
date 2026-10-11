@@ -15,7 +15,7 @@ import asyncio
 import json
 import sys
 from dataclasses import replace
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -44,7 +44,7 @@ async def record(doc: dict[str, Any], settings: Settings) -> dict[str, Any]:
         "_note": "Recorded from a live run on synthetic data. Replay mode streams these spans and this model output.",
         "scenario": doc["id"],
         "ride_log_sha256": ride_log_sha256(doc["ride_log"]),
-        "source": {"kind": "live", "recorded_at": datetime.now(timezone.utc).date().isoformat(), "model": settings.model},
+        "source": {"kind": "live", "recorded_at": datetime.now(UTC).date().isoformat(), "model": settings.model},
         "spans": spans,
         "result": out.model_output,
         "run": run,

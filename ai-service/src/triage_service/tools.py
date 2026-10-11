@@ -10,9 +10,10 @@ from __future__ import annotations
 
 import json
 import time
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable, Literal
+from datetime import UTC, datetime
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
@@ -64,7 +65,6 @@ def detect_events(tel: Telemetry, lo: int = 0, hi: int | None = None) -> list[di
     ts = s["t"]
     n = len(ts)
     hi = n - 1 if hi is None else min(hi, n - 1)
-    idx = range(lo, hi + 1)
     events: list[dict[str, Any]] = []
 
     def add(kind: str, mask: list[bool], extra: Callable[[int, int], dict[str, Any]], cap: int = 8) -> None:
@@ -80,11 +80,19 @@ def detect_events(tel: Telemetry, lo: int = 0, hi: int | None = None) -> list[di
         [d > 150 for d in delta],
         lambda a, b: {"max_delta_mv": max(delta[a : b + 1]), "max_current_a": max(s["current_a"][a : b + 1]), "min_cell_v": min(s["cell_min_v"][a : b + 1])},
     )
-    add("current_over_450a", [c > 450 for c in s["current_a"]], lambda a, b: {"peak_a": max(s["current_a"][a : b + 1]), "inverter_temp_c": s["inverter_temp_c"][a]})
+    add(
+        "current_over_450a",
+        [c > 450 for c in s["current_a"]],
+        lambda a, b: {"peak_a": max(s["current_a"][a : b + 1]), "inverter_temp_c": s["inverter_temp_c"][a]},
+    )
     add(
         "coolant_flow_below_1lpm_while_riding",
         [s["coolant_flow_lpm"][i] < 1.0 and s["speed_kmh"][i] > 5 for i in range(n)],
-        lambda a, b: {"min_flow_lpm": min(s["coolant_flow_lpm"][a : b + 1]), "motor_temp_start_c": s["motor_temp_c"][a], "motor_temp_end_c": s["motor_temp_c"][b]},
+        lambda a, b: {
+            "min_flow_lpm": min(s["coolant_flow_lpm"][a : b + 1]),
+            "motor_temp_start_c": s["motor_temp_c"][a],
+            "motor_temp_end_c": s["motor_temp_c"][b],
+        },
         cap=3,
     )
     add("motor_over_140c", [m > 140 for m in s["motor_temp_c"]], lambda a, b: {"peak_c": max(s["motor_temp_c"][a : b + 1])}, cap=3)
@@ -199,7 +207,12 @@ TOOLS: tuple[ToolSpec, ...] = (
         AnalyzeTelemetryInput,
         analyze_telemetry,
     ),
-    ToolSpec("lookup_fault_code", "Meaning, likely causes and checks for one fault code, plus when it was logged on this ride.", LookupFaultCodeInput, lookup_fault_code),
+    ToolSpec(
+        "lookup_fault_code",
+        "Meaning, likely causes and checks for one fault code, plus when it was logged on this ride.",
+        LookupFaultCodeInput,
+        lookup_fault_code,
+    ),
     ToolSpec(
         "search_service_bulletins",
         "Keyword search over service bulletins for this bike model. Returns fixes, parts, labour and firmware minimums.",
@@ -237,7 +250,7 @@ def build_sdk_tools(ctx: TriageContext, sink: SpanSink) -> list[Any]:
 
         @tool(spec.name, spec.description, schema)
         async def handler(args: dict[str, Any]) -> dict[str, Any]:
-            started = datetime.now(timezone.utc)
+            started = datetime.now(UTC)
             t0 = time.perf_counter()
             ok, payload = run_tool(ctx, spec, args)
             await sink(
