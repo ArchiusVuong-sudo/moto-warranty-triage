@@ -9,7 +9,7 @@ from .rules import decide
 from .tools import TriageContext
 
 
-def enforce_rules(result: dict[str, Any], ctx: TriageContext) -> tuple[dict[str, Any], list[str]]:
+def enforce_rules(result: dict[str, Any], ctx: TriageContext, called_tools: set[str] | None = None) -> tuple[dict[str, Any], list[str]]:
     """Replace the warranty block with the rules' decision for the model's own root cause.
 
     The model may copy check_warranty's answer or not; either way money is decided here.
@@ -24,6 +24,6 @@ def enforce_rules(result: dict[str, Any], ctx: TriageContext) -> tuple[dict[str,
     else:
         notes.append("warranty decision matches the rules")
     out["warranty"] = ruled
-    if not ctx.warranty_checks:
+    if called_tools is not None and "check_warranty" not in called_tools:
         notes.append("model skipped check_warranty; rules applied anyway")
     return out, notes

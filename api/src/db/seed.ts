@@ -70,7 +70,8 @@ export async function seed(db: Pick<DbService, 'query' | 'transaction'>, config:
       );
     }
     const causes = ['BATTERY_CELL_IMBALANCE', 'INVERTER_OVERCURRENT', 'COOLANT_PUMP_FAILURE', 'CHARGE_PORT_WATER_INGRESS', 'THROTTLE_CONNECTOR_INTERMITTENT', 'FIRMWARE_BELOW_MINIMUM', 'IMPACT_DAMAGE'];
-    const complaints = scenarios.filter((s) => s.expected.decision !== 'dead_letter').map((s) => s.title);
+    // Complaint text follows the cause, so the history reads consistently.
+    const complaints = causes.map((c) => scenarios.find((s) => s.expected.cause === c)?.title ?? 'Fault reported by dealer');
     // 20,000 historical claims over 18 months, written straight into the write model and the read model.
     await tx.query(
       `CREATE TEMP TABLE seed_claims ON COMMIT DROP AS

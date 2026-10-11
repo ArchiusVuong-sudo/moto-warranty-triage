@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Awaitable, Callable, Literal
 
@@ -29,7 +29,6 @@ class TriageContext:
     telemetry: Telemetry
     facts: VehicleFacts
     kb: Knowledge
-    warranty_checks: list[dict[str, Any]] = field(default_factory=list)
 
 
 # ---------- analyze_telemetry ----------
@@ -179,7 +178,6 @@ class CheckWarrantyInput(BaseModel):
 def check_warranty(ctx: TriageContext, args: CheckWarrantyInput) -> dict[str, Any]:
     d = decide(args.cause_code, args.confidence, ctx.facts, ctx.kb)
     out = {**d.as_dict(), "clause_text": ctx.kb.clauses[d.clause]["text"], "facts": ctx.facts.as_dict()}
-    ctx.warranty_checks.append({"cause_code": args.cause_code, **d.as_dict()})
     return out
 
 

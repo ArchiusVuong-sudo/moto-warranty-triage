@@ -97,7 +97,7 @@ export class OpsService {
         status: 'error',
       });
     }
-    return { ...out, affected_claims: active.length };
+    return { killed: out.killed, restart_in_ms: out.restartInMs, affected_claims: active.length };
   }
 
   async loseNextReply() {

@@ -6,8 +6,13 @@
   "author": "Khanh Vuong Tuan",
   "license": "MIT",
   "type": "module",
-  "workspaces": ["api", "web"],
-  "engines": { "node": ">=22" },
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "setup": "uv sync --project ai-service --frozen",
     "build": "npm run build -w web && npm run build -w api",
@@ -22,5 +27,7 @@
     "eval": "cd ai-service && uv run --frozen python -m triage_service.evals",
     "record:fixtures": "cd ai-service && uv run --frozen python -m triage_service.record_fixtures"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@playwright/test": "^1.64.0"
+  }
 }

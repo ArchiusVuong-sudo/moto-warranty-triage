@@ -29,18 +29,24 @@ async def triage_once(
     fixture: Fixture | None = None,
     on_retry: Callable[[str], Awaitable[None]] | None = None,
 ) -> Outcome:
+    called: set[str] = set()
+
+    async def tracking_sink(span: dict[str, Any]) -> None:
+        called.add(span["name"])
+        await sink(span)
+
     if settings.mode == "live":
-        live = await run_live(ctx, settings, sink, load_schema(), on_retry=on_retry)
+        live = await run_live(ctx, settings, tracking_sink, load_schema(), on_retry=on_retry)
         raw, meta, runs = live.result, live.meta, live.model_runs
         meta = {**meta, "mode": "live", "source": {"kind": "live", "model": settings.model}, "model_retries": live.retries}
     else:
         if fixture is None:
             raise LookupError("replay mode needs a fixture")
-        raw, meta = await replay(fixture, sink, settings.span_delay_ms)
+        raw, meta = await replay(fixture, tracking_sink, settings.span_delay_ms)
         runs = 0
         meta = {**meta, "mode": "replay", "source": fixture.source}
     validate_result(raw)
-    result, guardrails = enforce_rules(raw, ctx)
+    result, guardrails = enforce_rules(raw, ctx, called)
     validate_result(result)
     run = {**meta, "model_runs": max(runs, 1), "served_from_store": False, "guardrails": guardrails}
     return Outcome(result=result, run=run, model_output=raw, live_model_runs=runs)
