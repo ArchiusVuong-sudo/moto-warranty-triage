@@ -1,0 +1,26 @@
+{
+  "name": "moto-warranty-triage",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Warranty claims API that runs a Python triage agent as a retried, idempotent background job",
+  "author": "Khanh Vuong Tuan",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": ["api", "web"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "setup": "uv sync --project ai-service --frozen",
+    "build": "npm run build -w web && npm run build -w api",
+    "start": "npm run start -w api",
+    "start:replay": "DEMO_REPLAY=1 npm run start -w api",
+    "test": "npm run test:api && npm run test:py",
+    "test:api": "npm run test -w api",
+    "test:py": "cd ai-service && uv run --frozen pytest -q",
+    "test:e2e": "playwright test",
+    "typecheck": "npm run typecheck -w api && npm run typecheck -w web",
+    "lint": "npm run lint -w api",
+    "eval": "cd ai-service && uv run --frozen python -m triage_service.evals",
+    "record:fixtures": "cd ai-service && uv run --frozen python -m triage_service.record_fixtures"
+  },
+  "devDependencies": {}
+}

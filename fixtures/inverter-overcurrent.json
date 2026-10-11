@@ -57,7 +57,7 @@
       "reason": "Drive unit: vehicle is 8 months and 2,980 km, inside 24 months."
     }
   },
-  "ride_log_sha256": "83db743839ce3457dca32c471f5bf6f178a6687ed1c47302531b96046f981e44",
+  "ride_log_sha256": "798a732eef2c7495bf1f46708e704fa12fff75482a575ee4b06439936946824a",
   "run": {
     "cost_usd": 0.02659,
     "duration_ms": 9949,

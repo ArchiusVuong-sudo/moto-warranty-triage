@@ -78,8 +78,19 @@ class TriageRequest(BaseModel):
         return ride_log_sha256(self.ride_log.model_dump(mode="json"))
 
 
+def _normalize(value: Any) -> Any:
+    """2.0 and 2 hash the same: JSON from JavaScript drops the trailing .0."""
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    if isinstance(value, list):
+        return [_normalize(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _normalize(v) for k, v in value.items()}
+    return value
+
+
 def sha256_json(value: Any) -> str:
-    canonical = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    canonical = json.dumps(_normalize(value), sort_keys=True, separators=(",", ":"), ensure_ascii=True)
     return hashlib.sha256(canonical.encode()).hexdigest()
 
 

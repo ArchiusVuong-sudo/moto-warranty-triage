@@ -57,7 +57,7 @@
       "reason": "Battery pack and battery controller: vehicle is 11 months and 4,210 km, inside 36 months or 30,000 km."
     }
   },
-  "ride_log_sha256": "1f87b180145868a0c8dad70e45f698534227bafe15393c763c2956180b5342d4",
+  "ride_log_sha256": "9a00b1e7f9ea17d45f06fca19437732bc28f10bbf328a158ba95b4d0c992c1f0",
   "run": {
     "cost_usd": 0.04239,
     "duration_ms": 10845,

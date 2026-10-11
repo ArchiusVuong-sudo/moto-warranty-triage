@@ -46,7 +46,7 @@
       "reason": "Firmware 3.9.4 is below the minimum in SB-2026-06, SB-2026-08, SB-2026-09; the update is covered at no charge."
     }
   },
-  "ride_log_sha256": "f4d8f94f4d92322d4142b0799768decab7f52db1f19d7bb41647170a53dedc03",
+  "ride_log_sha256": "0216aa9b830169bb3eb2d3b2074bd942335ee2119255e7d8aad5973e4cc9b694",
   "run": {
     "cost_usd": 0.02731,
     "duration_ms": 9753,

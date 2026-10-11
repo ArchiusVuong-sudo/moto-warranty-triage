@@ -52,7 +52,7 @@
       "reason": "General coverage: vehicle is 9 months and 3,320 km, inside 24 months."
     }
   },
-  "ride_log_sha256": "98b6b8513d383d3fd41e1a8f2331fca8fd5ce8f075571acf9e75d4d55c107be5",
+  "ride_log_sha256": "2406d01a1ace6c3e30a771b9648fa878c72b8a859e52896052e5edec52015aba",
   "run": {
     "cost_usd": 0.02615,
     "duration_ms": 10069,
