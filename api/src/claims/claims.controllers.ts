@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, HttpCode, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
@@ -12,6 +12,10 @@ import { GetClaimQuery, GetTimelineQuery, ListClaimsQuery, ListClaimsV1Query, ty
 
 export const V1_DEPRECATED_AT = Date.UTC(2026, 8, 1) / 1000;
 export const V1_SUNSET = new Date(Date.UTC(2027, 2, 31)).toUTCString();
+
+/** A claim id path parameter; anything but a UUID is a 400 before it reaches the database. */
+const ClaimId = () =>
+  Param('id', new ParseUUIDPipe({ exceptionFactory: () => new ProblemException(400, 'invalid-claim-id', 'Invalid claim id', 'Claim ids are UUIDs.') }));
 
 @ApiTags('v2 claims')
 @ApiBearerAuth()
@@ -62,7 +66,7 @@ export class ClaimsV2Controller {
   @Get(':id')
   @RequireScopes('claims:read')
   @ApiOperation({ summary: 'Claim detail with the triage result; ETag is the claim version' })
-  async detail(@CurrentPrincipal() p: Principal, @Param('id') id: string, @Res({ passthrough: true }) res: Response): Promise<ClaimDetail> {
+  async detail(@CurrentPrincipal() p: Principal, @ClaimId() id: string, @Res({ passthrough: true }) res: Response): Promise<ClaimDetail> {
     const d = await this.queries.execute<GetClaimQuery, ClaimDetail>(new GetClaimQuery(p, id));
     res.setHeader('ETag', `"${d.claim.version}"`);
     return d;
@@ -71,7 +75,7 @@ export class ClaimsV2Controller {
   @Get(':id/timeline')
   @RequireScopes('claims:read')
   @ApiOperation({ summary: 'Every step under the claim trace id' })
-  timeline(@CurrentPrincipal() p: Principal, @Param('id') id: string) {
+  timeline(@CurrentPrincipal() p: Principal, @ClaimId() id: string) {
     return this.queries.execute(new GetTimelineQuery(p, id));
   }
 
@@ -82,7 +86,7 @@ export class ClaimsV2Controller {
   @ApiHeader({ name: 'If-Match', required: true, description: 'ETag from GET /v2/claims/{id}; a stale value returns 412' })
   async decide(
     @CurrentPrincipal() p: Principal,
-    @Param('id') id: string,
+    @ClaimId() id: string,
     @Headers('if-match') ifMatch: string | undefined,
     @Body() body: TriageDecisionDto,
     @Res({ passthrough: true }) res: Response,

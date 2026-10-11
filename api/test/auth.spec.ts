@@ -16,6 +16,15 @@ describe('auth and scopes', () => {
     expect(res.body).toMatchObject({ status: 401, title: 'API key required', instance: '/v2/claims' });
   });
 
+  it('400 problem+json for a claim id that is not a UUID', async () => {
+    for (const path of ['/v2/claims/not-a-uuid', '/v2/claims/undefined/timeline']) {
+      const res = await t.http.get(path).set(t.auth('key_engineer'));
+      expect(res.status).toBe(400);
+      expect(res.headers['content-type']).toContain('application/problem+json');
+      expect(res.body).toMatchObject({ title: 'Invalid claim id' });
+    }
+  });
+
   it('401 for an unknown key', async () => {
     const res = await t.http.get('/v2/claims').set('Authorization', 'Bearer demo_dealer_000000000000');
     expect(res.status).toBe(401);
