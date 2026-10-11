@@ -86,3 +86,21 @@ def test_prompt_carries_facts_not_the_raw_log(make_ctx):
     prompt = build_prompt(make_ctx("cell-imbalance"))
     assert "BMS-201" in prompt and "Ridgeback MX" in prompt and "11 months" in prompt
     assert len(prompt) < 1200
+
+
+def test_run_dirs_live_under_a_service_owned_root_and_old_ones_are_swept():
+    import os
+    import time
+
+    from triage_service.agent import run_dirs_root, sweep_run_dirs
+
+    root = run_dirs_root()
+    old = root / "run-test-old"
+    fresh = root / "run-test-fresh"
+    old.mkdir(exist_ok=True)
+    fresh.mkdir(exist_ok=True)
+    past = time.time() - 7200
+    os.utime(old, (past, past))
+    sweep_run_dirs(older_than_s=3600)
+    assert not old.exists() and fresh.exists()
+    fresh.rmdir()

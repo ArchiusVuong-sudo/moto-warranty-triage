@@ -18,6 +18,7 @@ import tempfile
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from .config import Settings
@@ -37,6 +38,24 @@ Parts and labour come from the matching bulletin. Copy the warranty decision, cl
 If the data does not point to one cause, use UNDETERMINED with confidence below 0.5. Keep the summary under 70 words, plain English."""
 
 TRANSIENT_STATUS = {408, 429, 500, 502, 503, 504, 529}
+
+
+def run_dirs_root() -> Path:
+    """Parent of the per-run temp cwds. Owned by this service, so leftovers from a killed run can be swept."""
+    root = Path(tempfile.gettempdir()) / "moto-warranty-triage-runs"
+    root.mkdir(exist_ok=True)
+    return root
+
+
+def sweep_run_dirs(older_than_s: float = 3600) -> int:
+    """Remove run dirs left behind by a killed process (SIGKILL skips the cleanup in _one_run)."""
+    cutoff = time.time() - older_than_s
+    removed = 0
+    for d in run_dirs_root().glob("run-*"):
+        if d.is_dir() and d.stat().st_mtime < cutoff:
+            shutil.rmtree(d, ignore_errors=True)
+            removed += 1
+    return removed
 
 
 def build_prompt(ctx: TriageContext) -> str:
@@ -109,7 +128,7 @@ async def _one_run(ctx: TriageContext, settings: Settings, sink: SpanSink, schem
     from claude_agent_sdk import ResultMessage, create_sdk_mcp_server, query
 
     server = create_sdk_mcp_server(name=SERVER_NAME, version="1.0.0", tools=build_sdk_tools(ctx, sink))
-    cwd = tempfile.mkdtemp(prefix="triage-run-")
+    cwd = tempfile.mkdtemp(prefix="run-", dir=run_dirs_root())
     options = build_options(settings, server, cwd, build_child_env(os.environ), schema)
     t0 = time.perf_counter()
     result_msg: Any = None

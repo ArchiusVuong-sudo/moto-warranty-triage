@@ -10,6 +10,7 @@ import time
 
 import uvicorn
 
+from .agent import sweep_run_dirs
 from .app import TriageService, create_app
 from .config import Settings
 from .env import scrub_process_env
@@ -37,6 +38,7 @@ def main() -> None:
     settings = Settings.from_env()
     if settings.parent_pid:
         watch_parent(settings.parent_pid)
+    sweep_run_dirs()
     store = RunStore(settings.db_path)
     app = create_app(TriageService(settings, store))
     print(f"triage service on 127.0.0.1:{settings.port} mode={settings.mode}", file=sys.stderr, flush=True)
