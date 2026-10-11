@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import uuid
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
@@ -103,6 +104,19 @@ def ndjson(line: dict[str, Any]) -> bytes:
 
 class ReplyLost(Exception):
     """Raised inside the stream to drop the connection on purpose (fault drill)."""
+
+
+class DrillLogFilter(logging.Filter):
+    """The lose-reply drill aborts the stream by raising ReplyLost, which the server
+    logs as an unhandled exception. Log it as one intentional line instead."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        exc = record.exc_info[1] if record.exc_info else None
+        if isinstance(exc, ReplyLost):
+            record.msg, record.args = str(exc), ()
+            record.exc_info, record.exc_text = None, None
+            record.levelno, record.levelname = logging.WARNING, "WARNING"
+        return True
 
 
 def create_app(service: TriageService) -> FastAPI:

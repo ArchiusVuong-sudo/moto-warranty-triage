@@ -136,3 +136,23 @@ def test_store_begin_states():
     s.complete("a", {"r": 1}, [{"name": "t"}], {"m": 1})
     state, stored = s.begin("a", "h1", "boot", "replay")
     assert state == "done" and stored is not None and stored.result == {"r": 1}
+
+
+def test_lose_reply_drill_logs_one_line_not_a_traceback():
+    import logging
+    import sys
+
+    from triage_service.app import DrillLogFilter, ReplyLost
+
+    try:
+        raise ReplyLost("fault drill: reply dropped after the result was stored")
+    except ReplyLost:
+        drill = logging.LogRecord("uvicorn.error", logging.ERROR, __file__, 1, "Exception in ASGI application", (), sys.exc_info())
+    try:
+        raise ValueError("real bug")
+    except ValueError:
+        real = logging.LogRecord("uvicorn.error", logging.ERROR, __file__, 1, "Exception in ASGI application", (), sys.exc_info())
+    f = DrillLogFilter()
+    assert f.filter(drill) and f.filter(real)
+    assert drill.exc_info is None and drill.levelname == "WARNING" and "reply dropped" in drill.getMessage()
+    assert real.exc_info is not None and real.levelname == "ERROR"
