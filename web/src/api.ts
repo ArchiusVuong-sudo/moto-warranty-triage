@@ -1,6 +1,6 @@
 import type { DemoConfig, DemoKey } from './types';
 
-export type Role = DemoKey['role'];
+export type Role = DemoKey['role'] | 'dealer2';
 
 export interface LoggedRequest {
   id: number;
@@ -40,11 +40,11 @@ export const requestLog = {
   },
 };
 
-let keys: Record<Role, string> = { console: '', dealer: '', engineer: '' };
+let keys: Record<Role, string> = { console: '', dealer: '', dealer2: '', engineer: '' };
 
 export function setKeys(config: DemoConfig) {
   const pick = (id: string) => config.keys.find((k) => k.id === id)?.value ?? '';
-  keys = { console: pick('key_console'), dealer: pick('key_dealer_1'), engineer: pick('key_engineer') };
+  keys = { console: pick('key_console'), dealer: pick('key_dealer_1'), dealer2: pick('key_dealer_2'), engineer: pick('key_engineer') };
 }
 
 export const keyFor = (role: Role) => keys[role];

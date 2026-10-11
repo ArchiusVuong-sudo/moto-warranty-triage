@@ -133,7 +133,7 @@ function Burst() {
     setRunning(true);
     setCells([]);
     for (let i = 0; i < 30; i++) {
-      const res = await api('GET', '/v2/claims?limit=1', { role: 'dealer' });
+      const res = await api('GET', '/v2/claims?limit=1', { role: 'dealer2' });
       setCells((c) => [...c, { status: res.status, retryAfter: res.headers.get('retry-after'), remaining: res.headers.get('ratelimit-remaining') }]);
     }
     setRunning(false);
@@ -143,7 +143,7 @@ function Burst() {
   return (
     <div className="space-y-4 p-5">
       <p className="text-[13px] leading-relaxed text-slate-600">
-        The dealer key has a token bucket of 20 requests, refilled at 1 per second. 30 requests back to back should end in 429s, each with Retry-After.
+        Each dealer key has a token bucket of 20 requests, refilled at 1 per second. 30 requests back to back on the Ridgeway Cycles dealer key should end in 429s, each with Retry-After. Limits are per key, so filing claims as Northgate Moto Works still works.
       </p>
       <Button variant="primary" onClick={burst} disabled={running} data-testid="burst">
         {running ? <Spinner className="h-3.5 w-3.5" /> : <Gauge size={14} />} Burst 30 requests (dealer key)
