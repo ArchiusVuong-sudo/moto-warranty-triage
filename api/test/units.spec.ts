@@ -11,7 +11,7 @@ import { buildChildEnv, pickPort } from '../src/triage-service/supervisor.servic
 
 const root = loadConfig({}).repoRoot;
 const fixtures = readdirSync(join(root, 'fixtures'))
-  .filter((f) => f.endsWith('.json') && f !== 'eval-report.json')
+  .filter((f) => f.endsWith('.json'))
   .map((f) => JSON.parse(readFileSync(join(root, 'fixtures', f), 'utf8')) as { scenario: string; result: TriageResult });
 
 describe('CursorCodec', () => {

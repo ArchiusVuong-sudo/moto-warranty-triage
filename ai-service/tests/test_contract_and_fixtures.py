@@ -15,7 +15,6 @@ from triage_service.scenarios import all_scenarios
 from triage_service.tools import TOOLS, run_tool
 
 FIXTURES = sorted(FIXTURES_DIR.glob("*.json"))
-FIXTURES = [p for p in FIXTURES if p.name != "eval-report.json"]
 
 
 def test_every_valid_scenario_has_a_fixture():

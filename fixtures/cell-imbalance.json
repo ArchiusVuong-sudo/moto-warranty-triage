@@ -3,27 +3,32 @@
   "result": {
     "evidence": [
       {
-        "detail": "Cell delta reached 199 mV at 317 A, min cell 3.51 V. Spread opens under load; later peaks hit 248 mV (t=65-77s) and 283 mV overall.",
+        "detail": "Cell delta reached 199 mV at 317 A, min cell 3.51 V; first power cut.",
         "kind": "telemetry",
         "ref": "t=8-9s"
       },
       {
-        "detail": "Cell voltage deviation over 150 mV under load, logged 6 times (first t=8s).",
+        "detail": "Cell delta up to 248 mV at 335 A, min cell 3.39 V. Peak delta over the ride 283 mV; 38+ further events over 150 mV.",
+        "kind": "telemetry",
+        "ref": "t=65-77s"
+      },
+      {
+        "detail": "Cell voltage deviation over 150 mV under load, logged 6 times (t=8, 65, 119, 176, 234, 289).",
         "kind": "fault_code",
         "ref": "BMS-201"
       },
       {
-        "detail": "Torque limit active, logged 1s after each BMS-201 (t=9s, 66s, 120s...), matching the power cuts.",
+        "detail": "Torque limit active, logged 1 s after each BMS-201 (t=9, 66, 120, 177, 235, 290).",
         "kind": "fault_code",
         "ref": "VCU-110"
       },
       {
-        "detail": "Cell group balance drift: power cut under hard acceleration, BMS-201, VCU-110. Fix: replace module and rebalance.",
+        "detail": "Cell group balance drift: power cut under hard acceleration with BMS-201 and VCU-110. Replace module and rebalance.",
         "kind": "bulletin",
         "ref": "SB-2026-01"
       },
       {
-        "detail": "Battery pack covered 36 months or 30,000 km; bike is 11 months, 4,210 km.",
+        "detail": "Battery pack covered for 36 months or 30,000 km; bike is 11 months and 4,210 km.",
         "kind": "policy",
         "ref": "W2"
       }
@@ -50,7 +55,7 @@
       "title": "Weak cell group causing voltage spread under load"
     },
     "schema_version": "1",
-    "summary": "Cell voltage spread exceeds 150 mV under heavy current, up to 283 mV. Each BMS-201 is followed one second later by a VCU-110 torque cut, which is the power loss the customer feels. This matches bulletin SB-2026-01. Replace the battery module and busbar kit, then rebalance. Covered under W2.",
+    "summary": "Cell voltage spread opens above 150 mV (up to 283 mV) under high current. Each BMS-201 is followed one second later by a VCU-110 torque cut, which matches the power loss out of corners. This fits bulletin SB-2026-01. Replace the battery module and busbar kit, then rebalance the pack. Covered under W2.",
     "warranty": {
       "clause": "W2",
       "decision": "covered",
@@ -59,12 +64,12 @@
   },
   "ride_log_sha256": "9a00b1e7f9ea17d45f06fca19437732bc28f10bbf328a158ba95b4d0c992c1f0",
   "run": {
-    "cost_usd": 0.04239,
-    "duration_ms": 10845,
-    "input_tokens": 22330,
+    "cost_usd": 0.03033,
+    "duration_ms": 10091,
+    "input_tokens": 22345,
     "model": "claude-sonnet-5-5",
     "num_turns": 7,
-    "output_tokens": 1198
+    "output_tokens": 1262
   },
   "scenario": "cell-imbalance",
   "source": {
@@ -74,7 +79,7 @@
   },
   "spans": [
     {
-      "duration_ms": 0.5,
+      "duration_ms": 0.83,
       "input": {},
       "name": "analyze_telemetry",
       "ok": true,
@@ -279,10 +284,10 @@
         "window": "t=0-599s"
       },
       "seq": 1,
-      "started_at": "2026-10-11T04:03:29.858579+00:00"
+      "started_at": "2026-10-11T04:36:07.949845+00:00"
     },
     {
-      "duration_ms": 0.05,
+      "duration_ms": 0.06,
       "input": {
         "code": "BMS-201"
       },
@@ -310,7 +315,7 @@
         "title": "Cell voltage deviation high"
       },
       "seq": 2,
-      "started_at": "2026-10-11T04:03:31.471750+00:00"
+      "started_at": "2026-10-11T04:36:09.316369+00:00"
     },
     {
       "duration_ms": 0.02,
@@ -339,10 +344,10 @@
         "title": "Torque limit active"
       },
       "seq": 3,
-      "started_at": "2026-10-11T04:03:31.746290+00:00"
+      "started_at": "2026-10-11T04:36:09.616547+00:00"
     },
     {
-      "duration_ms": 0.24,
+      "duration_ms": 0.19,
       "input": {
         "model": "Ridgeback MX",
         "query": "power cut under acceleration cell imbalance BMS-201 VCU-110"
@@ -394,10 +399,10 @@
         ]
       },
       "seq": 4,
-      "started_at": "2026-10-11T04:03:31.988562+00:00"
+      "started_at": "2026-10-11T04:36:09.820512+00:00"
     },
     {
-      "duration_ms": 0.04,
+      "duration_ms": 0.06,
       "input": {
         "cause_code": "BATTERY_CELL_IMBALANCE",
         "confidence": 0.9
@@ -417,13 +422,14 @@
           "firmware": "4.1.2",
           "first_fault_t": 8,
           "max_g_before_first_fault": 1.6,
+          "model": "Ridgeback MX",
           "odometer_km": 4210,
           "water_exposure": false
         },
         "reason": "Battery pack and battery controller: vehicle is 11 months and 4,210 km, inside 36 months or 30,000 km."
       },
       "seq": 5,
-      "started_at": "2026-10-11T04:03:33.685761+00:00"
+      "started_at": "2026-10-11T04:36:11.152778+00:00"
     }
   ]
 }

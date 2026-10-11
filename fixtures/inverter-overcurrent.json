@@ -3,32 +3,37 @@
   "result": {
     "evidence": [
       {
-        "detail": "Current peak 533 A (over 450 A limit) at inverter temp 64.4 C; INV-301 logged.",
+        "detail": "Current spike 533 A (limit 450 A) with inverter temp 64.4 C, normal.",
         "kind": "telemetry",
         "ref": "t=142-142s"
       },
       {
-        "detail": "Current peak 544 A, inverter temp 76.1 C.",
+        "detail": "Current spike 544 A, inverter temp 76.1 C.",
         "kind": "telemetry",
         "ref": "t=263-263s"
       },
       {
-        "detail": "Spikes of 538.9 A at t=388 (83.4 C) and 529.5 A at t=507 (88.1 C); four spikes total, each matching a fault.",
+        "detail": "Current spike 539 A, inverter temp 83.4 C.",
         "kind": "telemetry",
-        "ref": "t=388-507s"
+        "ref": "t=388-388s"
       },
       {
-        "detail": "Phase overcurrent above 450 A, gates shut. Logged at t=142, 263, 388, 507. Cut and restart points to inverter current sensing.",
+        "detail": "Current spike 529 A, inverter temp 88.1 C. Coolant flow steady at 5.8-6.2 L/min.",
+        "kind": "telemetry",
+        "ref": "t=507-507s"
+      },
+      {
+        "detail": "Phase overcurrent, logged 4 times (t=142, 263, 388, 507s). Spike with cut and restart points to inverter current sensing.",
         "kind": "fault_code",
         "ref": "INV-301"
       },
       {
-        "detail": "Inverter phase current sensor offset: motor cuts out and restarts at full throttle, INV-301. Fix is replacing the sensor board and phase calibration.",
+        "detail": "Inverter phase current sensor offset: matches cut-out at full throttle, INV-301 and spikes over 450 A.",
         "kind": "bulletin",
         "ref": "SB-2026-02"
       },
       {
-        "detail": "Motor and inverter covered for 24 months; bike is 8 months and 2,980 km.",
+        "detail": "Motor and inverter covered 24 months; bike is 8 months, 2,980 km.",
         "kind": "policy",
         "ref": "W3"
       }
@@ -46,11 +51,11 @@
     "root_cause": {
       "code": "INVERTER_OVERCURRENT",
       "component": "Inverter current sensor board",
-      "confidence": 0.85,
-      "title": "Inverter phase current sensor offset causing INV-301 cut-outs"
+      "confidence": 0.9,
+      "title": "Inverter phase current sensor offset causing false overcurrent trips"
     },
     "schema_version": "1",
-    "summary": "Four current spikes of 529\u2013544 A, each matching an INV-301 fault, caused the motor to cut out and restart at full throttle. Spikes occurred across a range of inverter temperatures, so this is not heat. This matches SB-2026-02: replace the inverter current sensor board and calibrate. Covered under W3.",
+    "summary": "Four INV-301 phase overcurrent trips, each with a current spike of about 530-544 A, over the 450 A limit. Each happened as the motor cut out at high throttle. Coolant flow was steady. This matches bulletin SB-2026-02 (current sensor offset). Replace the sensor board and run the phase calibration. Covered under W3.",
     "warranty": {
       "clause": "W3",
       "decision": "covered",
@@ -59,12 +64,12 @@
   },
   "ride_log_sha256": "798a732eef2c7495bf1f46708e704fa12fff75482a575ee4b06439936946824a",
   "run": {
-    "cost_usd": 0.02659,
-    "duration_ms": 9949,
-    "input_tokens": 15229,
+    "cost_usd": 0.02436,
+    "duration_ms": 9535,
+    "input_tokens": 15175,
     "model": "claude-sonnet-5-5",
     "num_turns": 6,
-    "output_tokens": 1192
+    "output_tokens": 1152
   },
   "scenario": "inverter-overcurrent",
   "source": {
@@ -74,7 +79,7 @@
   },
   "spans": [
     {
-      "duration_ms": 0.78,
+      "duration_ms": 0.58,
       "input": {},
       "name": "analyze_telemetry",
       "ok": true,
@@ -210,10 +215,10 @@
         "window": "t=0-599s"
       },
       "seq": 1,
-      "started_at": "2026-10-11T04:04:23.745538+00:00"
+      "started_at": "2026-10-11T04:37:18.543347+00:00"
     },
     {
-      "duration_ms": 0.06,
+      "duration_ms": 0.03,
       "input": {
         "code": "INV-301"
       },
@@ -239,10 +244,10 @@
         "title": "Phase overcurrent"
       },
       "seq": 2,
-      "started_at": "2026-10-11T04:04:24.351179+00:00"
+      "started_at": "2026-10-11T04:37:19.129742+00:00"
     },
     {
-      "duration_ms": 0.1,
+      "duration_ms": 0.17,
       "input": {
         "model": "Talus EN",
         "query": "motor cuts out at full throttle INV-301"
@@ -292,13 +297,13 @@
         ]
       },
       "seq": 3,
-      "started_at": "2026-10-11T04:04:24.357554+00:00"
+      "started_at": "2026-10-11T04:37:19.135472+00:00"
     },
     {
-      "duration_ms": 0.05,
+      "duration_ms": 0.09,
       "input": {
         "cause_code": "INVERTER_OVERCURRENT",
-        "confidence": 0.85
+        "confidence": 0.9
       },
       "name": "check_warranty",
       "ok": true,
@@ -314,13 +319,14 @@
           "firmware": "4.1.2",
           "first_fault_t": 142,
           "max_g_before_first_fault": 1.9,
+          "model": "Talus EN",
           "odometer_km": 2980,
           "water_exposure": false
         },
         "reason": "Drive unit: vehicle is 8 months and 2,980 km, inside 24 months."
       },
       "seq": 4,
-      "started_at": "2026-10-11T04:04:26.505202+00:00"
+      "started_at": "2026-10-11T04:37:20.735477+00:00"
     }
   ]
 }

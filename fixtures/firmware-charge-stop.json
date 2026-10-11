@@ -3,27 +3,32 @@
   "result": {
     "evidence": [
       {
-        "detail": "Charging stopped at SOC 80.0% with 10.86 kW just before. Cell delta steady at 20 mV, pack temp 24-27 C, no impact (0.05 g), humidity 47-49%.",
+        "detail": "Charging stopped at SOC 80.0% with 10.86 kW just before. Cell delta steady at 20 mV, so no cell imbalance.",
         "kind": "telemetry",
-        "ref": "t=408s"
+        "ref": "t=408-408s"
       },
       {
-        "detail": "Charge taper error at t=408s: charging stopped early because the taper table rejected the requested current.",
+        "detail": "Pack temp 24-27 C, humidity about 48%, peak 0.05 g. No impact, water or thermal cause.",
+        "kind": "telemetry",
+        "ref": "t=0-599s"
+      },
+      {
+        "detail": "Charge taper error at t=408s. Charging stopped early because the taper table rejected the requested current.",
         "kind": "fault_code",
         "ref": "BMS-210"
       },
       {
-        "detail": "Firmware compatibility warning at t=409s: a controller runs firmware older than the current minimum.",
+        "detail": "Firmware compatibility warning at t=409s. A controller runs older firmware than the release minimum.",
         "kind": "fault_code",
         "ref": "FW-130"
       },
       {
-        "detail": "Charge stops at 80% on firmware before 4.1.0. Bike runs 3.9.4. Fix is a firmware update, no parts, 0.5 h.",
+        "detail": "Charge stops at 80% on firmware before 4.1.0. Vehicle runs 3.9.4. Fix: update firmware, no parts.",
         "kind": "bulletin",
         "ref": "SB-2026-06"
       },
       {
-        "detail": "Firmware defects fixed by a published service bulletin are covered at no charge for the life of the vehicle.",
+        "detail": "Firmware defects fixed by a published service bulletin are covered at no charge.",
         "kind": "policy",
         "ref": "W5"
       }
@@ -35,25 +40,25 @@
     "root_cause": {
       "code": "FIRMWARE_BELOW_MINIMUM",
       "component": "Battery and vehicle controller firmware",
-      "confidence": 0.95,
+      "confidence": 0.93,
       "title": "Charge taper defect on firmware older than 4.1.0"
     },
     "schema_version": "1",
-    "summary": "Charging stopped at exactly 80% SOC, logging BMS-210 and then FW-130. The bike runs firmware 3.9.4, below the 4.1.0 minimum in SB-2026-06. Cell balance, temperature, impact and water readings are normal. Update the battery and vehicle controller firmware (0.5 h, no parts). Covered under W5.",
+    "summary": "Charging stops at 80% because the bike runs firmware 3.9.4, below the 4.1.0 minimum in SB-2026-06. BMS-210 and FW-130 logged at the stop. Cells are balanced and there was no impact or water. Update the battery and vehicle controller firmware (0.5 h, no parts). Covered under W5.",
     "warranty": {
       "clause": "W5",
       "decision": "covered",
-      "reason": "Firmware 3.9.4 is below the minimum in SB-2026-06, SB-2026-08, SB-2026-09; the update is covered at no charge."
+      "reason": "Firmware 3.9.4 is below the minimum in SB-2026-06, SB-2026-08; the update is covered at no charge."
     }
   },
   "ride_log_sha256": "0216aa9b830169bb3eb2d3b2074bd942335ee2119255e7d8aad5973e4cc9b694",
   "run": {
-    "cost_usd": 0.02731,
-    "duration_ms": 9753,
-    "input_tokens": 19916,
+    "cost_usd": 0.02589,
+    "duration_ms": 10793,
+    "input_tokens": 19912,
     "model": "claude-sonnet-5-5",
     "num_turns": 7,
-    "output_tokens": 1168
+    "output_tokens": 1179
   },
   "scenario": "firmware-charge-stop",
   "source": {
@@ -63,7 +68,7 @@
   },
   "spans": [
     {
-      "duration_ms": 0.6,
+      "duration_ms": 0.58,
       "input": {},
       "name": "analyze_telemetry",
       "ok": true,
@@ -173,10 +178,10 @@
         "window": "t=0-599s"
       },
       "seq": 1,
-      "started_at": "2026-10-11T04:04:02.200312+00:00"
+      "started_at": "2026-10-11T04:36:54.933318+00:00"
     },
     {
-      "duration_ms": 0.03,
+      "duration_ms": 0.07,
       "input": {
         "code": "BMS-210"
       },
@@ -198,10 +203,10 @@
         "title": "Charge taper error"
       },
       "seq": 2,
-      "started_at": "2026-10-11T04:04:03.397987+00:00"
+      "started_at": "2026-10-11T04:36:56.714513+00:00"
     },
     {
-      "duration_ms": 0.03,
+      "duration_ms": 0.02,
       "input": {
         "code": "FW-130"
       },
@@ -222,10 +227,10 @@
         "title": "Firmware compatibility warning"
       },
       "seq": 3,
-      "started_at": "2026-10-11T04:04:03.702337+00:00"
+      "started_at": "2026-10-11T04:36:56.937557+00:00"
     },
     {
-      "duration_ms": 0.09,
+      "duration_ms": 0.18,
       "input": {
         "model": "Ridgeback MX",
         "query": "charging stops at 80 percent BMS-210 FW-130 firmware minimum"
@@ -272,13 +277,13 @@
         ]
       },
       "seq": 4,
-      "started_at": "2026-10-11T04:04:03.900077+00:00"
+      "started_at": "2026-10-11T04:36:57.186391+00:00"
     },
     {
-      "duration_ms": 0.04,
+      "duration_ms": 0.1,
       "input": {
         "cause_code": "FIRMWARE_BELOW_MINIMUM",
-        "confidence": 0.95
+        "confidence": 0.93
       },
       "name": "check_warranty",
       "ok": true,
@@ -295,13 +300,14 @@
           "firmware": "3.9.4",
           "first_fault_t": 408,
           "max_g_before_first_fault": 0.05,
+          "model": "Ridgeback MX",
           "odometer_km": 9120,
           "water_exposure": false
         },
-        "reason": "Firmware 3.9.4 is below the minimum in SB-2026-06, SB-2026-08, SB-2026-09; the update is covered at no charge."
+        "reason": "Firmware 3.9.4 is below the minimum in SB-2026-06, SB-2026-08; the update is covered at no charge."
       },
       "seq": 5,
-      "started_at": "2026-10-11T04:04:05.441206+00:00"
+      "started_at": "2026-10-11T04:36:58.803048+00:00"
     }
   ]
 }

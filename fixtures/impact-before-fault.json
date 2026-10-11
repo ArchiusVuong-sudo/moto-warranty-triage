@@ -3,22 +3,22 @@
   "result": {
     "evidence": [
       {
-        "detail": "Impact event peak 9.4 g at 31 km/h (limit 6 g); imu_peak_g otherwise ~0.6-1 g.",
+        "detail": "Impact over 6 g: peak 9.4 g at 31.0 km/h. Other values in the ride log are in normal ranges.",
         "kind": "telemetry",
-        "ref": "t=318s"
+        "ref": "t=318-318s"
       },
       {
-        "detail": "Impact event recorded at t=318s, above 6 g. Later faults follow the impact.",
+        "detail": "Impact event recorded at t=318s (above 6 g). Later faults follow the impact.",
         "kind": "fault_code",
         "ref": "IMU-801"
       },
       {
-        "detail": "Display bus timeout at t=322s, 4 s after impact. Check harness and mount for impact damage.",
+        "detail": "Display bus timeout at t=322s, 4 s after the impact. Check the harness and mount for impact damage.",
         "kind": "fault_code",
         "ref": "DSP-901"
       },
       {
-        "detail": "Body bus off at t=323s; possible harness short or failed node.",
+        "detail": "Body bus off at t=323s, after the display timeout. Possible harness short or failed node.",
         "kind": "fault_code",
         "ref": "CAN-950"
       },
@@ -34,12 +34,12 @@
     },
     "root_cause": {
       "code": "IMPACT_DAMAGE",
-      "component": "Dash display / body bus harness",
+      "component": "Display / body bus harness",
       "confidence": 0.85,
-      "title": "Impact damage to display harness or dash"
+      "title": "Impact event led to display bus loss and blank dash"
     },
     "schema_version": "1",
-    "summary": "A 9.4 g impact at t=318s was followed within seconds by a display bus timeout and a body bus-off fault. The blank dash most likely comes from impact damage to the display or its harness. No service bulletin matched, so no parts or labour are listed. Not covered under W6.",
+    "summary": "A 9.4 g impact at t=318s came before the display bus timeout (DSP-901) and body bus-off (CAN-950). The faults follow the impact, so the blank dash is likely harness or display damage from it. No service bulletin matched, so no parts or labour are listed. Not covered under W6.",
     "warranty": {
       "clause": "W6",
       "decision": "not_covered",
@@ -48,12 +48,12 @@
   },
   "ride_log_sha256": "3230b6633e88b5b5b6a8a57523f51af9276ed8ef4eaa62dcddc52d517957d294",
   "run": {
-    "cost_usd": 0.02667,
-    "duration_ms": 9320,
-    "input_tokens": 19876,
+    "cost_usd": 0.02545,
+    "duration_ms": 10209,
+    "input_tokens": 19890,
     "model": "claude-sonnet-5-5",
     "num_turns": 8,
-    "output_tokens": 1121
+    "output_tokens": 1161
   },
   "scenario": "impact-before-fault",
   "source": {
@@ -63,7 +63,7 @@
   },
   "spans": [
     {
-      "duration_ms": 0.9,
+      "duration_ms": 0.58,
       "input": {},
       "name": "analyze_telemetry",
       "ok": true,
@@ -181,10 +181,10 @@
         "window": "t=0-599s"
       },
       "seq": 1,
-      "started_at": "2026-10-11T04:04:13.208921+00:00"
+      "started_at": "2026-10-11T04:37:06.876029+00:00"
     },
     {
-      "duration_ms": 0.03,
+      "duration_ms": 0.07,
       "input": {
         "code": "IMU-801"
       },
@@ -205,10 +205,10 @@
         "title": "Impact event recorded"
       },
       "seq": 2,
-      "started_at": "2026-10-11T04:04:14.455525+00:00"
+      "started_at": "2026-10-11T04:37:08.352773+00:00"
     },
     {
-      "duration_ms": 0.02,
+      "duration_ms": 0.01,
       "input": {
         "code": "DSP-901"
       },
@@ -230,10 +230,10 @@
         "title": "Display bus timeout"
       },
       "seq": 3,
-      "started_at": "2026-10-11T04:04:14.804483+00:00"
+      "started_at": "2026-10-11T04:37:08.651022+00:00"
     },
     {
-      "duration_ms": 0.01,
+      "duration_ms": 0.02,
       "input": {
         "code": "CAN-950"
       },
@@ -255,13 +255,13 @@
         "title": "Body bus off"
       },
       "seq": 4,
-      "started_at": "2026-10-11T04:04:14.869866+00:00"
+      "started_at": "2026-10-11T04:37:08.768420+00:00"
     },
     {
-      "duration_ms": 0.11,
+      "duration_ms": 0.19,
       "input": {
         "model": "Ridgeback MX",
-        "query": "display blank dash after impact IMU-801 DSP-901 CAN-950"
+        "query": "display blank dash IMU-801 IMU-802 DSP-901 CAN-950 impact"
       },
       "name": "search_service_bulletins",
       "ok": true,
@@ -270,10 +270,10 @@
         "results": []
       },
       "seq": 5,
-      "started_at": "2026-10-11T04:04:15.248065+00:00"
+      "started_at": "2026-10-11T04:37:09.140650+00:00"
     },
     {
-      "duration_ms": 0.05,
+      "duration_ms": 0.06,
       "input": {
         "cause_code": "IMPACT_DAMAGE",
         "confidence": 0.85
@@ -295,13 +295,14 @@
           "firmware": "4.1.2",
           "first_fault_t": 322,
           "max_g_before_first_fault": 9.4,
+          "model": "Ridgeback MX",
           "odometer_km": 2440,
           "water_exposure": false
         },
         "reason": "Impact of 9.4 g recorded within 60 s before the first fault (limit 6 g)."
       },
       "seq": 6,
-      "started_at": "2026-10-11T04:04:16.496598+00:00"
+      "started_at": "2026-10-11T04:37:10.519366+00:00"
     }
   ]
 }

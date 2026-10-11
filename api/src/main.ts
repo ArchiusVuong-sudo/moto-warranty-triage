@@ -1,7 +1,13 @@
 import 'reflect-metadata';
 import { Logger } from '@nestjs/common';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { createApp } from './bootstrap.js';
-import { loadConfig } from './config.js';
+import { findRepoRoot, loadConfig } from './config.js';
+
+// Optional overrides from .env at the repo root (see .env.example); real environment variables win.
+const envFile = join(findRepoRoot(), '.env');
+if (existsSync(envFile)) process.loadEnvFile(envFile);
 
 const config = loadConfig();
 const app = await createApp(config);

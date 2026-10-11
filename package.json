@@ -27,7 +27,8 @@
     "eval": "cd ai-service && uv run --frozen python -m triage_service.evals",
     "record:fixtures": "cd ai-service && uv run --frozen python -m triage_service.record_fixtures",
     "test:all": "npm test && npm run test:e2e",
-    "test:live": "cd ai-service && LIVE=1 uv run --frozen pytest -q tests/test_live.py"
+    "test:live": "cd ai-service && LIVE=1 uv run --frozen pytest -q tests/test_live.py",
+    "eval:live": "cd ai-service && uv run --frozen python -m triage_service.evals --live --out ../evals/live-report.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0"

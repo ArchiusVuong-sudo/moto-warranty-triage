@@ -3,27 +3,22 @@
   "result": {
     "evidence": [
       {
-        "detail": "Humidity 96.5-98.5% (peak 98.5%); no impact (imu peak 0.05 g); stationary.",
+        "detail": "Humidity 96.5-98.5% (over 95%). IMU peak 0.05 g, no impact. Charging at about 10.7 kW stopped at t=96s.",
         "kind": "telemetry",
         "ref": "t=0-599s"
       },
       {
-        "detail": "Charging stopped at SoC 32.88% after 10.72 kW, matching the ~1.5 minute trip.",
-        "kind": "telemetry",
-        "ref": "t=96-96s"
-      },
-      {
-        "detail": "Charge port moisture detected at plug in (t=2s).",
+        "detail": "Charge port moisture detected at plug in, logged t=2s.",
         "kind": "fault_code",
         "ref": "CHG-701"
       },
       {
-        "detail": "Charge port isolation fault during charging (t=96s).",
+        "detail": "Charge port isolation fault during charging, logged t=96s.",
         "kind": "fault_code",
         "ref": "CHG-702"
       },
       {
-        "detail": "Dry the port and replace the port seal (71-0404, 0.6 h). Pressure washing at the port is excluded.",
+        "detail": "Dry the port and replace the charge port seal (71-0404, 1 off, 0.6 h).",
         "kind": "bulletin",
         "ref": "SB-2026-04"
       },
@@ -47,10 +42,10 @@
       "code": "CHARGE_PORT_WATER_INGRESS",
       "component": "Charge port",
       "confidence": 0.9,
-      "title": "Water in charge port after washing causing isolation fault"
+      "title": "Water in charge port after washing causes isolation fault"
     },
     "schema_version": "1",
-    "summary": "Bike was washed, then the charge port read wet at plug in (CHG-701). Charging tripped at 96 s with an isolation fault (CHG-702). Humidity was above 95% and there was no impact. Per SB-2026-04, dry the port and replace the seal. Water from washing is excluded under W7, so this is not covered.",
+    "summary": "Water got into the charge port when the bike was washed. The port read wet at plug in (CHG-701), then tripped on an isolation fault 96 seconds into charging (CHG-702). No impact was recorded. Fix is to dry the port and fit a new seal. Washing damage is excluded, so this is not covered under W7.",
     "warranty": {
       "clause": "W7",
       "decision": "not_covered",
@@ -59,12 +54,12 @@
   },
   "ride_log_sha256": "d1d5fa27c23522da76251fb8ef5bcacd8406da404f33f723ef734ff786609234",
   "run": {
-    "cost_usd": 0.02678,
-    "duration_ms": 9728,
-    "input_tokens": 20011,
+    "cost_usd": 0.02514,
+    "duration_ms": 9370,
+    "input_tokens": 20058,
     "model": "claude-sonnet-5-5",
     "num_turns": 7,
-    "output_tokens": 1112
+    "output_tokens": 1080
   },
   "scenario": "water-ingress",
   "source": {
@@ -74,7 +69,7 @@
   },
   "spans": [
     {
-      "duration_ms": 0.68,
+      "duration_ms": 0.7,
       "input": {},
       "name": "analyze_telemetry",
       "ok": true,
@@ -189,10 +184,10 @@
         "window": "t=0-599s"
       },
       "seq": 1,
-      "started_at": "2026-10-11T04:04:47.114385+00:00"
+      "started_at": "2026-10-11T04:37:39.081901+00:00"
     },
     {
-      "duration_ms": 0.04,
+      "duration_ms": 0.02,
       "input": {
         "code": "CHG-701"
       },
@@ -214,10 +209,10 @@
         "title": "Charge port moisture detected"
       },
       "seq": 2,
-      "started_at": "2026-10-11T04:04:48.417500+00:00"
+      "started_at": "2026-10-11T04:37:40.411572+00:00"
     },
     {
-      "duration_ms": 0.02,
+      "duration_ms": 0.01,
       "input": {
         "code": "CHG-702"
       },
@@ -239,12 +234,13 @@
         "title": "Charge port isolation fault"
       },
       "seq": 3,
-      "started_at": "2026-10-11T04:04:48.795553+00:00"
+      "started_at": "2026-10-11T04:37:40.707914+00:00"
     },
     {
-      "duration_ms": 0.34,
+      "duration_ms": 0.09,
       "input": {
-        "query": "charge port water ingress washed charging trips CHG-701 CHG-702"
+        "model": "Kestrel SM",
+        "query": "charge port water ingress CHG-701 CHG-702 charging trips"
       },
       "name": "search_service_bulletins",
       "ok": true,
@@ -288,10 +284,10 @@
         ]
       },
       "seq": 4,
-      "started_at": "2026-10-11T04:04:48.851794+00:00"
+      "started_at": "2026-10-11T04:37:40.956442+00:00"
     },
     {
-      "duration_ms": 0.03,
+      "duration_ms": 0.06,
       "input": {
         "cause_code": "CHARGE_PORT_WATER_INGRESS",
         "confidence": 0.9
@@ -311,13 +307,14 @@
           "firmware": "4.1.2",
           "first_fault_t": 2,
           "max_g_before_first_fault": 0.05,
+          "model": "Kestrel SM",
           "odometer_km": 1870,
           "water_exposure": true
         },
         "reason": "Charge port read wet at plug in with humidity at or above 95%: water from washing is excluded."
       },
       "seq": 5,
-      "started_at": "2026-10-11T04:04:50.144415+00:00"
+      "started_at": "2026-10-11T04:37:42.448491+00:00"
     }
   ]
 }

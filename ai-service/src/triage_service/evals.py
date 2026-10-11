@@ -2,7 +2,7 @@
 
     uv run python -m triage_service.evals            # replay fixtures, no model call
     uv run python -m triage_service.evals --live     # fresh live runs
-    uv run python -m triage_service.evals --out fixtures/eval-report.json
+    uv run python -m triage_service.evals --live --out ../evals/live-report.json
 
 Checks per scenario: root cause code, warranty decision and clause (after the
 rules guardrail), evidence that cites telemetry and a fault code, and whether

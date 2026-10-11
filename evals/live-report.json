@@ -1,0 +1,141 @@
+{
+  "cases": [
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.9,
+      "cost_usd": 0.03047,
+      "duration_ms": 10274,
+      "expected": "BATTERY_CELL_IMBALANCE",
+      "got": "BATTERY_CELL_IMBALANCE",
+      "scenario": "cell-imbalance",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    },
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.9,
+      "cost_usd": 0.02928,
+      "duration_ms": 13427,
+      "expected": "COOLANT_PUMP_FAILURE",
+      "got": "COOLANT_PUMP_FAILURE",
+      "scenario": "coolant-pump",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    },
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.93,
+      "cost_usd": 0.02575,
+      "duration_ms": 10718,
+      "expected": "FIRMWARE_BELOW_MINIMUM",
+      "got": "FIRMWARE_BELOW_MINIMUM",
+      "scenario": "firmware-charge-stop",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    },
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.85,
+      "cost_usd": 0.02564,
+      "duration_ms": 9935,
+      "expected": "IMPACT_DAMAGE",
+      "got": "IMPACT_DAMAGE",
+      "scenario": "impact-before-fault",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    },
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.85,
+      "cost_usd": 0.02377,
+      "duration_ms": 8660,
+      "expected": "INVERTER_OVERCURRENT",
+      "got": "INVERTER_OVERCURRENT",
+      "scenario": "inverter-overcurrent",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    },
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.9,
+      "cost_usd": 0.02529,
+      "duration_ms": 12007,
+      "expected": "THROTTLE_CONNECTOR_INTERMITTENT",
+      "got": "THROTTLE_CONNECTOR_INTERMITTENT",
+      "scenario": "throttle-connector",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    },
+    {
+      "checks": {
+        "evidence": true,
+        "model_matched_rules": true,
+        "root_cause": true,
+        "warranty": true
+      },
+      "confidence": 0.9,
+      "cost_usd": 0.02484,
+      "duration_ms": 9045,
+      "expected": "CHARGE_PORT_WATER_INGRESS",
+      "got": "CHARGE_PORT_WATER_INGRESS",
+      "scenario": "water-ingress",
+      "source": {
+        "kind": "live",
+        "model": "claude-sonnet-5-5"
+      }
+    }
+  ],
+  "mean_duration_ms": 10581,
+  "mode": "live",
+  "model": "claude-sonnet-5-5",
+  "run_at": "2026-10-11T04:39:19+00:00",
+  "total_cost_usd": 0.185,
+  "totals": {
+    "evidence": "7/7",
+    "model_matched_rules": "7/7",
+    "root_cause": "7/7",
+    "warranty": "7/7"
+  }
+}
