@@ -1,9 +1,13 @@
 import { BookOpen, FilePlus2, FlaskConical, Network, Zap } from 'lucide-react';
+import { useRef } from 'react';
 import type { Health } from '../types';
 import { Badge, Button } from './ui';
 
 export function Header({ health, onFile, onDrills, onInspector }: { health: Health | null; onFile: () => void; onDrills: () => void; onInspector: () => void }) {
-  const mode = health?.triage_service.mode;
+  // Keep showing the last known mode while the triage service restarts.
+  const lastMode = useRef<'live' | 'replay' | null>(null);
+  if (health?.triage_service.mode) lastMode.current = health.triage_service.mode;
+  const mode = lastMode.current;
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5">
       <div className="flex items-center gap-3">
