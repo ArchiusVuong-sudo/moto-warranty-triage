@@ -18,7 +18,7 @@ Full video: https://github.com/ArchiusVuong-sudo/moto-warranty-triage/releases/d
 ## Architecture
 
 ```mermaid
-flowchart LR
+flowchart TB
   console[React console] -->|REST + SSE| api
   dealer[Dealer system] -->|REST v1 and v2| api
   subgraph api_box[NestJS API]
